@@ -739,7 +739,7 @@ document.addEventListener("click", function(e){
     if (wishlist[id]){ delete wishlist[id]; toast("Removed from wishlist."); } else { wishlist[id]=true; toast("❤️ Added to wishlist."); }
     updateBadges(); render(currentRoute, true); return;
   }
-  var c = e.target.closest("[data-catgo]"); if (c){ shopState.cat = c.getAttribute("data-catgo"); shopState.q=""; go("shop"); }
+  var c = e.target.closest("[data-catgo]"); if (c){ e.preventDefault(); shopState.cat = c.getAttribute("data-catgo"); shopState.q=""; go("shop"); }
 });
 
 /* ---------- views ---------- */
@@ -825,8 +825,11 @@ document.addEventListener("click", function(e){
 
 function productSection(title, sub, list, navArg){
   if (!list.length) return "";
+  var viewLink = navArg
+    ? '<a class="link-arrow" href="#" data-catgo="'+navArg+'">'+tx("View All →","সব দেখুন →")+'</a>'
+    : '<a class="link-arrow" href="#" data-nav="shop">'+tx("View All Products →","সব পণ্য দেখুন →")+'</a>';
   return '<section class="sec" style="padding-top:34px;padding-bottom:34px"><div class="wrap">' +
-    '<div class="sec-head"><div><h2>'+title+'</h2><p>'+sub+'</p></div><a class="link-arrow" href="#" data-nav="shop">'+tx("View All Products →","সব পণ্য দেখুন →")+'</a></div>' +
+    '<div class="sec-head"><div><h2>'+title+'</h2><p>'+sub+'</p></div>'+viewLink+'</div>' +
     gridHTML(list) + '</div></section>';
 }
 
@@ -835,12 +838,24 @@ function homeHTML(){
   var news = products.filter(function(p){ return p.flags.indexOf("new")>=0; });
   var best = products.filter(function(p){ return p.flags.indexOf("best")>=0; });
   var offers = products.filter(function(p){ return p.flags.indexOf("offer")>=0 && discount(p)>0; });
-  var featSec = productSection(tx("Featured Products","ফিচার্ড পণ্য"),"Hand-picked highlights from the shop.", featured);
+  var featSec = productSection(tx("New iPhone","নতুন আইফোন"),"Hand-picked highlights from the shop.", featured);
   var newsSec = productSection(tx("New Arrivals","নতুন এসেছে"),"The latest arrivals in store.", news);
   var bestSec = productSection(tx("Best Selling","সেরা বিক্রিত"),"Customer favourites, picked by the shop.", best);
   var offerSec = productSection(tx("Special Offers","বিশেষ অফার"),"Discounted picks from the shop.", offers);
-  var catalogBlock = (featSec || newsSec || bestSec || offerSec)
-    ? (featSec ? '<section class="sec alt" style="padding-top:40px">'+featSec+'</section>' : '') + newsSec + (bestSec ? '<section class="sec alt">'+bestSec+'</section>' : '') + offerSec
+  /* One section per category that has products — up to 8 products each,
+     headed by the category name, with a link into that category's shop view. */
+  var catOrder = ["smartphones","ipads","macbooks","smartwatches","earbuds","speakers","accessories"];
+  var catSecs = "", catIdx = 0;
+  catOrder.forEach(function(cid){
+    var list = products.filter(function(p){ return p.cat===cid; }).slice(0,8);
+    if (!list.length) return;
+    var c = null; for (var i=0;i<categories.length;i++) if (categories[i].id===cid) c = categories[i];
+    var s = productSection(esc(catName(cid)), c ? c.blurb : "", list, cid);
+    catSecs += (catIdx % 2 === 1) ? '<section class="sec alt">'+s+'</section>' : s;
+    catIdx++;
+  });
+  var catalogBlock = (featSec || catSecs || newsSec || bestSec || offerSec)
+    ? (featSec ? '<section class="sec alt" style="padding-top:40px">'+featSec+'</section>' : '') + catSecs + newsSec + (bestSec ? '<section class="sec alt">'+bestSec+'</section>' : '') + offerSec
     : '<section class="sec"><div class="wrap"><div class="empty"><h3>'+tx("No products yet","এখনো কোনো পণ্য নেই")+'</h3><p>'+tx("New products are coming soon. Message us on WhatsApp to ask about any gadget you need.","নতুন পণ্য শীঘ্রই আসছে। আপনার প্রয়োজনীয় গ্যাজেট সম্পর্কে জানতে WhatsApp-এ মেসেজ করুন।")+'</p><br/><a class="btn wa" href="'+waLink("Hello UGES! I want to ask about a product.")+'" target="_blank" rel="noopener">'+tx("WhatsApp the Shop","WhatsApp-এ মেসেজ করুন")+'</a></div></div></section>';
   var why = [
     ["shield","Quality Gadgets","Carefully sourced smartphones and accessories, checked before they reach your hands."],
