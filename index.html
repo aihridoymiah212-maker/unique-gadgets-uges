@@ -460,9 +460,12 @@ footer .flogo b{color:#fff;font-family:'Archivo';font-size:1.05rem;line-height:1
 
 <script>
 "use strict";
-/* ============ UGES store — session-based front-end build.
-   Cart, orders, accounts and admin changes live in this browser session only.
-   Products, prices and photos are managed in Admin. ============ */
+/* ============ UGES store — static front-end build with a shared catalogue.
+   The catalogue (products, prices, photos, categories, shop settings) lives
+   in the owner's Supabase database, so changes the owner makes in Admin are
+   seen by every visitor; localStorage keeps an offline cache of it and the
+   built-in catalogue below is the fallback. Cart, orders and customer
+   accounts live in this browser session only. ============ */
 var WA_NUM = "8801731909199";
 var settings = { insideFee: 60, outsideFee: 130, insideTime: "24–48 hours inside Tangail", outsideTime: "2–4 working days outside Tangail" };
 
@@ -541,15 +544,15 @@ var products = [
      Phones whose post named no price have price 0 — the shop shows
      "Call for Price" for them until the owner sets a price in Admin.
      No photos were available, so they show the category icon for now. */
-  { id:"fb-01", name:"Sony Xperia 1 VI", brand:"Sony", model:"Xperia 1 Mark 6", cat:"used-phones", price:0, oldPrice:0, stock:1, flags:[], bg:"#E4F0FF", desc:"Super fresh condition. 12GB RAM, 256GB storage. Only cash memo included.", specs:{ "RAM":"12GB", "Storage":"256GB", "Condition":"Super Fresh Condition", "Included":"Cash Memo Only" }, warranty:"Ask the shop for warranty details", img:"" },
+  { id:"fb-01", name:"Sony Xperia 1 VI", brand:"Sony", model:"Xperia 1 Mark 6", cat:"used-phones", price:54999, oldPrice:0, stock:1, flags:[], bg:"#E4F0FF", desc:"Super fresh condition. 12GB RAM, 256GB storage. Only cash memo included.", specs:{ "RAM":"12GB", "Storage":"256GB", "Condition":"Super Fresh Condition", "Included":"Cash Memo Only" }, warranty:"Ask the shop for warranty details", img:"" },
   { id:"fb-02", name:"iPhone 13 Pro Max", brand:"Apple", model:"—", cat:"used-phones", price:43000, oldPrice:0, stock:1, flags:[], bg:"#FFE4EC", desc:"American variant, 256GB storage. Battery health 74%. Box included. Please note: the display has a single green line issue.", specs:{ "Variant":"American", "Storage":"256GB", "Battery Health":"74%", "Included":"Box Included", "Display":"Single green line issue" }, warranty:"Ask the shop for warranty details", img:"" },
   { id:"fb-03", name:"iPhone 14 Pro Max", brand:"Apple", model:"—", cat:"used-phones", price:68000, oldPrice:0, stock:1, flags:[], bg:"#EFE7FF", desc:"Singapore variant, 256GB storage. Battery health 88%. Purple colour. Without box.", specs:{ "Variant":"Singapore", "Storage":"256GB", "Battery Health":"88%", "Colour":"Purple", "Included":"Without Box" }, warranty:"Ask the shop for warranty details", img:"" },
   { id:"fb-04", name:"iPhone 14 Pro", brand:"Apple", model:"—", cat:"used-phones", price:58000, oldPrice:0, stock:1, flags:[], bg:"#FFF0D6", desc:"128GB storage. Battery health 79%. Super fresh condition. Only cash memo included.", specs:{ "Storage":"128GB", "Battery Health":"79%", "Condition":"Super Fresh Condition", "Included":"Cash Memo Only" }, warranty:"Ask the shop for warranty details", img:"" },
   { id:"fb-05", name:"iPhone 14 Pro Max (American, Box)", brand:"Apple", model:"—", cat:"used-phones", price:65000, oldPrice:0, stock:1, flags:[], bg:"#E6FBF2", desc:"American variant, 256GB storage. Battery health 75%. Original box included.", specs:{ "Variant":"American", "Storage":"256GB", "Battery Health":"75%", "Included":"Original Box Included" }, warranty:"Ask the shop for warranty details", img:"" },
-  { id:"fb-06", name:"Google Pixel 9", brand:"Google", model:"—", cat:"used-phones", price:0, oldPrice:0, stock:1, flags:[], bg:"#FDEBD3", desc:"12GB RAM, 128GB storage. Flagship camera with AI-powered camera features. Premium build quality.", specs:{ "RAM":"12GB", "Storage":"128GB", "Camera":"Flagship Camera, AI-Powered Camera Features", "Build":"Premium Build Quality" }, warranty:"Ask the shop for warranty details", img:"" },
-  { id:"fb-07", name:"Redmi Turbo 4 Pro", brand:"Redmi", model:"—", cat:"used-phones", price:0, oldPrice:0, stock:1, flags:[], bg:"#FFF3C4", desc:"12GB RAM / 256GB ROM. Full box included. Hardcore gaming experience with a premium flagship design.", specs:{ "RAM":"12GB", "Storage":"256GB", "Included":"Full Box Included", "Highlights":"Hardcore Gaming Experience, Premium Flagship Design" }, warranty:"Ask the shop for warranty details", img:"" },
-  { id:"fb-08", name:"Motorola Edge 70", brand:"Motorola", model:"—", cat:"used-phones", price:0, oldPrice:0, stock:1, flags:[], bg:"#FFE9C9", desc:"12GB RAM / 256GB ROM. Super fresh condition. Full box available, original charger included.", specs:{ "RAM":"12GB", "Storage":"256GB", "Condition":"Super Fresh Condition", "Included":"Full Box Available, Original Charger Included" }, warranty:"Ask the shop for warranty details", img:"" },
-  { id:"fb-09", name:"Sony Xperia Smartphone", brand:"Sony", model:"—", cat:"used-phones", price:0, oldPrice:0, stock:1, flags:[], bg:"#E9F7E4", desc:"Elegant & premium design with the signature Sony camera experience. Stunning display & multimedia, smooth performance and reliable battery backup.", specs:{ "Design":"Elegant & Premium Design", "Camera":"Signature Sony Camera Experience", "Display":"Stunning Display & Multimedia", "Performance":"Smooth Performance", "Battery":"Reliable Battery Backup" }, warranty:"Ask the shop for warranty details", img:"" }
+  { id:"fb-06", name:"Google Pixel 9", brand:"Google", model:"—", cat:"used-phones", price:78000, oldPrice:0, stock:1, flags:[], bg:"#FDEBD3", desc:"12GB RAM, 128GB storage. Flagship camera with AI-powered camera features. Premium build quality.", specs:{ "RAM":"12GB", "Storage":"128GB", "Camera":"Flagship Camera, AI-Powered Camera Features", "Build":"Premium Build Quality" }, warranty:"Ask the shop for warranty details", img:"" },
+  { id:"fb-07", name:"Redmi Turbo 4 Pro", brand:"Redmi", model:"—", cat:"used-phones", price:31999, oldPrice:0, stock:1, flags:[], bg:"#FFF3C4", desc:"12GB RAM / 256GB ROM. Full box included. Hardcore gaming experience with a premium flagship design.", specs:{ "RAM":"12GB", "Storage":"256GB", "Included":"Full Box Included", "Highlights":"Hardcore Gaming Experience, Premium Flagship Design" }, warranty:"Ask the shop for warranty details", img:"" },
+  { id:"fb-08", name:"Motorola Edge 70", brand:"Motorola", model:"—", cat:"used-phones", price:56999, oldPrice:0, stock:1, flags:[], bg:"#FFE9C9", desc:"12GB RAM / 256GB ROM. Super fresh condition. Full box available, original charger included.", specs:{ "RAM":"12GB", "Storage":"256GB", "Condition":"Super Fresh Condition", "Included":"Full Box Available, Original Charger Included" }, warranty:"Ask the shop for warranty details", img:"" },
+  { id:"fb-09", name:"Sony Xperia Smartphone", brand:"Sony", model:"—", cat:"used-phones", price:28000, oldPrice:0, stock:1, flags:[], bg:"#E9F7E4", desc:"Elegant & premium design with the signature Sony camera experience. Stunning display & multimedia, smooth performance and reliable battery backup.", specs:{ "Design":"Elegant & Premium Design", "Camera":"Signature Sony Camera Experience", "Display":"Stunning Display & Multimedia", "Performance":"Smooth Performance", "Battery":"Reliable Battery Backup" }, warranty:"Ask the shop for warranty details", img:"" }
 ];
 
 var cart = {};            /* productId -> qty (this session) */
@@ -558,7 +561,7 @@ var orders = [];          /* orders placed this session */
 var exchanges = [];       /* exchange requests this session */
 var users = {};           /* phone -> {name, phone, pass, address} */
 var currentUser = null;
-var adminPass = null, adminAuthed = false, adminTab = "overview";
+var adminAuthed = false, adminTab = "overview";
 var adminProdQ = "", adminProdCat = "all", adminFormMode = null, adminFormId = null, adminCatEditId = null;
 var adminFormImg = "", adminFormImgKey = null; /* photo chosen in the open product form (data URL or link) */
 var shopState = { cat:"all", q:"", sort:"featured" };
@@ -574,6 +577,240 @@ document.addEventListener("input", function(e){
 });
 var lastOrder = null, lastExchange = null, trackResult = null, trackError = "";
 var contactSent = false, xPhotos = [];
+
+/* ---------- catalogue persistence ----------
+   The shared Supabase database (further below) is the source of truth:
+   every Admin change is pushed there so all visitors see it. The copy in
+   localStorage is only an offline cache/fallback for this browser, and
+   SEED_CATALOG keeps the published catalogue for the Reset option and as
+   the fallback when neither the database nor the cache has anything. */
+var CATALOG_KEY = "uges-admin-catalog-v1";
+var SEED_CATALOG = null;
+try { SEED_CATALOG = JSON.parse(JSON.stringify({ products: products, categories: categories, settings: settings })); } catch(_){ SEED_CATALOG = null; }
+var adminSaveError = false;
+function trySaveCatalog(){
+  try {
+    localStorage.setItem(CATALOG_KEY, JSON.stringify({ products: products, categories: categories, settings: settings }));
+    adminSaveError = false;
+    return true;
+  } catch(e){ return false; }
+}
+function shrinkDataUrl(url, max, quality, cb){
+  var img = new Image();
+  img.onload = function(){
+    try {
+      var w = img.naturalWidth||max, h = img.naturalHeight||max;
+      var scale = Math.min(1, max/Math.max(w,h));
+      var cv = document.createElement("canvas");
+      cv.width = Math.max(1, Math.round(w*scale)); cv.height = Math.max(1, Math.round(h*scale));
+      cv.getContext("2d").drawImage(img, 0, 0, cv.width, cv.height);
+      cb(cv.toDataURL("image/jpeg", quality));
+    } catch(_){ cb(null); }
+  };
+  img.onerror = function(){ cb(null); };
+  img.src = url;
+}
+function persistAdminData(){
+  scheduleDbPush();
+  if (trySaveCatalog()) return;
+  /* Storage full — most likely a large uploaded photo. Shrink every uploaded
+     photo harder (max 600px, JPEG quality 0.7) and try once more; if it
+     still does not fit, tell the owner clearly instead of losing it silently. */
+  var targets = products.filter(function(p){ return p.img && p.img.indexOf("data:")===0; });
+  if (!targets.length){ adminSaveError = true; if (currentRoute==="admin") render("admin", true); return; }
+  var pending = targets.length;
+  targets.forEach(function(p){
+    shrinkDataUrl(p.img, 600, 0.7, function(out){
+      if (out) p.img = out;
+      pending--;
+      if (pending>0) return;
+      scheduleDbPush();
+      if (trySaveCatalog()){
+        toast("📷 Photos were compressed a little more so your changes could be saved in this browser.");
+      } else {
+        adminSaveError = true;
+        toast("⚠️ <b>Could not save in this browser</b> — its storage is full. The change shows now but will disappear on reload. Try a smaller photo.");
+      }
+      if (currentRoute==="admin") render("admin", true);
+    });
+  });
+}
+function loadAdminData(){
+  var d = null;
+  try { var raw = localStorage.getItem(CATALOG_KEY); if (raw) d = JSON.parse(raw); } catch(e){ d = null; }
+  if (!d) return;
+  if (d.products && d.products.length) products = d.products;
+  if (d.categories && d.categories.length) categories = d.categories;
+  if (d.settings) settings = d.settings;
+  categories.forEach(function(c){ if (!CAT_ICON[c.id]) CAT_ICON[c.id] = "acc"; });
+}
+loadAdminData();
+
+/* ---------- shared database (Supabase) ----------
+   The catalogue lives in the owner's Supabase project (table site_data,
+   key "catalog") so every visitor sees the same products, prices and
+   photos. Anyone can read it with the public anon key; only the signed-in
+   owner can write. localStorage above is now just an offline cache —
+   the database wins whenever it is reachable. Admin sign-in uses
+   Supabase Auth (email + password); the session is kept in this browser
+   until the owner taps Logout. */
+var SB_URL = "https://vtogiikfhptudxcxfhfh.supabase.co";
+var SB_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ0b2dpaWtmaHB0dWR4Y3hmaGZoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU0MTkyNzMsImV4cCI6MjExMDk5NTI3M30.vdTTqeEKStTwuVr0dQPlzKOJQmNOsPppRGlWTQ-RkPY";
+var SB_SESSION_KEY = "uges-admin-session-v1";
+var sbSession = null;        /* {access_token, refresh_token, email} when the owner is signed in */
+var adminCreated = null;     /* null = not checked yet, false = first-run setup needed, true = account exists */
+var adminForceSignIn = false;
+var adminNotice = "";
+var dbSaveError = false;
+function sbErrMsg(d){ return (d && (d.msg || d.message || d.error_description)) || "Something went wrong — please try again."; }
+function saveSbSession(d){
+  sbSession = { access_token: d.access_token, refresh_token: d.refresh_token || (sbSession ? sbSession.refresh_token : ""), email: (d.user && d.user.email) || (sbSession ? sbSession.email : "") };
+  try { localStorage.setItem(SB_SESSION_KEY, JSON.stringify(sbSession)); } catch(_){}
+}
+function loadSbSession(){
+  try {
+    var raw = localStorage.getItem(SB_SESSION_KEY);
+    if (!raw) return;
+    var s = JSON.parse(raw);
+    if (s && s.access_token){ sbSession = s; adminAuthed = true; }
+  } catch(_){}
+}
+function clearSbSession(){
+  sbSession = null;
+  try { localStorage.removeItem(SB_SESSION_KEY); } catch(_){}
+}
+loadSbSession();
+function sbGetRow(key, cb){
+  fetch(SB_URL + "/rest/v1/site_data?key=eq." + encodeURIComponent(key) + "&select=value", {
+    headers: { "apikey": SB_ANON, "Authorization": "Bearer " + SB_ANON }
+  }).then(function(r){ return r.ok ? r.json() : null; })
+  .then(function(rows){ cb(rows && rows.length ? rows[0].value : null, true); })
+  .catch(function(){ cb(null, false); });
+}
+function sbRefreshSession(cb){
+  if (!sbSession || !sbSession.refresh_token){ cb("error"); return; }
+  fetch(SB_URL + "/auth/v1/token?grant_type=refresh_token", {
+    method: "POST",
+    headers: { "apikey": SB_ANON, "Content-Type": "application/json" },
+    body: JSON.stringify({ refresh_token: sbSession.refresh_token })
+  }).then(function(r){
+    return r.json().then(function(d){ return { status: r.status, d: d }; }).catch(function(){ return { status: r.status, d: {} }; });
+  }).then(function(res){
+    if (res.status===200 && res.d && res.d.access_token){ saveSbSession(res.d); cb("ok"); }
+    else if (res.status===400 || res.status===401) cb("invalid");
+    else cb("error");
+  }).catch(function(){ cb("error"); });
+}
+function sbUpsert(key, value, done){
+  if (!sbSession){ done(false); return; }
+  var retried = false;
+  function attempt(){
+    fetch(SB_URL + "/rest/v1/site_data", {
+      method: "POST",
+      headers: { "apikey": SB_ANON, "Authorization": "Bearer " + sbSession.access_token, "Content-Type": "application/json", "Prefer": "resolution=merge-duplicates" },
+      body: JSON.stringify({ key: key, value: value })
+    }).then(function(r){
+      if (r.status===401 && !retried){
+        retried = true;
+        sbRefreshSession(function(st){
+          if (st==="ok"){ attempt(); return; }
+          if (st==="invalid"){
+            clearSbSession(); adminAuthed = false;
+            adminNotice = "Your session expired — please sign in again.";
+            if (currentRoute==="admin") render("admin", true);
+          }
+          done(false);
+        });
+        return;
+      }
+      done(r.ok);
+    }).catch(function(){ done(false); });
+  }
+  attempt();
+}
+function sbAuth(path, body, cb){
+  fetch(SB_URL + path, {
+    method: "POST",
+    headers: { "apikey": SB_ANON, "Content-Type": "application/json" },
+    body: JSON.stringify(body)
+  }).then(function(r){
+    return r.json().then(function(d){ cb(r.ok, d); }).catch(function(){ cb(false, {}); });
+  }).catch(function(){ cb(false, { msg: "Could not reach the sign-in service — check your internet connection and try again." }); });
+}
+function catalogDoc(){ return { products: products, categories: categories, settings: settings }; }
+function applyRemoteCatalog(v){
+  if (!v || !v.products || !v.products.length) return false;
+  products = v.products;
+  if (v.categories && v.categories.length) categories = v.categories;
+  if (v.settings) settings = v.settings;
+  categories.forEach(function(c){ if (!CAT_ICON[c.id]) CAT_ICON[c.id] = "acc"; });
+  trySaveCatalog();
+  buildNav();
+  return true;
+}
+/* First sign-in (or account creation) finishes the one-time setup: mark the
+   admin as created and upload the current catalogue if the database is
+   still empty, so the shared shop starts with the same products. */
+function completeFirstSetup(){
+  if (!sbSession) return;
+  sbGetRow("meta", function(v, ok){
+    if (!ok) return;
+    if (v && v.admin_created){ adminCreated = true; return; }
+    sbUpsert("meta", { admin_created: true }, function(uok){ if (uok) adminCreated = true; });
+  });
+  sbGetRow("catalog", function(v, ok){
+    if (!ok) return;
+    if (v && v.products && v.products.length){
+      if (applyRemoteCatalog(v) && currentRoute==="admin") render("admin", true);
+    } else {
+      sbUpsert("catalog", catalogDoc(), function(){});
+    }
+  });
+}
+/* Push every admin change to the shared database (debounced). The change is
+   already kept in memory and in the local cache; if the push fails, Admin
+   shows a Retry banner instead of losing it silently. */
+var sbPushTimer = null, sbPushBusy = false, sbPushDirty = false;
+function scheduleDbPush(){
+  if (!sbSession) return;
+  sbPushDirty = true;
+  clearTimeout(sbPushTimer);
+  sbPushTimer = setTimeout(runDbPush, 500);
+}
+function runDbPush(){
+  if (!sbSession || sbPushBusy || !sbPushDirty) return;
+  sbPushBusy = true; sbPushDirty = false;
+  sbUpsert("catalog", catalogDoc(), function(ok){
+    sbPushBusy = false;
+    if (ok){
+      var hadErr = dbSaveError; dbSaveError = false;
+      toast("☁️ <b>Saved to database ✓</b> — live for everyone.");
+      if (hadErr && currentRoute==="admin") render("admin", true);
+      if (sbPushDirty) runDbPush();
+    } else {
+      dbSaveError = true; sbPushDirty = true;
+      toast("⚠️ <b>Could not save to the database.</b> Your change is kept here — tap “Retry Save” in Admin.");
+      if (currentRoute==="admin") render("admin", true);
+    }
+  });
+}
+/* On load: read the shared catalogue + setup state. The store is already on
+   screen with the built-in/local catalogue, so a slow or unreachable
+   database never blanks the page — the database simply wins when it answers. */
+function sbLoadRemote(){
+  sbGetRow("meta", function(v, ok){
+    if (!ok) return;
+    var was = adminCreated;
+    adminCreated = !!(v && v.admin_created);
+    if (currentRoute!=="admin" || adminAuthed || was===adminCreated) return;
+    var ae = document.activeElement;
+    if (ae && (ae.tagName==="INPUT" || ae.tagName==="TEXTAREA" || ae.tagName==="SELECT")) return;
+    render("admin", true);
+  });
+  sbGetRow("catalog", function(v, ok){
+    if (ok && applyRemoteCatalog(v) && !(currentRoute==="admin" && adminFormMode)) render(currentRoute, true);
+  });
+}
 
 function $(s, r){ return (r||document).querySelector(s); }
 function $all(s, r){ return Array.prototype.slice.call((r||document).querySelectorAll(s)); }
@@ -1409,7 +1646,7 @@ function productFormHTML(p){
   var specText = Object.keys(p.specs||{}).map(function(k){ return k+": "+p.specs[k]; }).join("\n");
   var flagDefs = [["featured","Featured"],["new","New Arrival"],["best","Best Selling"],["offer","Special Offer"]];
   return '<form class="formcard" id="productForm" style="margin-bottom:20px"><h3 style="margin-bottom:4px">'+(isEdit ? "Edit Product" : "Add New Product")+'</h3>' +
-  '<p style="color:var(--muted);margin-bottom:14px">'+(isEdit ? "Update any detail below — changes show in the shop right away (for this session)." : "Fill in the real product details — it appears in the shop right away (for this session).")+'</p>' +
+  '<p style="color:var(--muted);margin-bottom:14px">'+(isEdit ? "Update any detail below — changes show in the shop right away and are saved to the shared database, so every visitor sees them." : "Fill in the real product details — it appears in the shop right away and is saved to the shared database, so every visitor sees it.")+'</p>' +
   '<div class="grid2"><div class="field"><label>Product Name <span class="req">*</span></label><input name="name" value="'+esc(p.name)+'" placeholder="e.g. Samsung Galaxy A55" /></div>' +
   '<div class="field"><label>Category</label><select name="cat">'+categories.map(function(c){ return '<option value="'+c.id+'"'+(p.cat===c.id?" selected":"")+'>'+esc(c.name)+'</option>'; }).join("")+'</select></div></div>' +
   '<div class="grid2"><div class="field"><label>Brand</label><input name="brand" value="'+esc(p.brand)+'" placeholder="Brand" /></div>' +
@@ -1461,18 +1698,22 @@ function adminProductsHTML(){
     form + cards;
 }
 function adminHTML(){
-  if (!adminPass){
-    return pageHead("Admin <em>Setup</em>", "Owner only — this sign-in is not linked anywhere on the shop. First visit: create the admin password. You stay signed in until you tap Logout.") +
-    '<section class="sec"><div class="wrap" style="max-width:480px"><form class="formcard" id="adminSetupForm">' +
-    '<div class="field"><label>Create Admin Password</label><input name="pass" type="password" placeholder="At least 6 characters" /></div>' +
-    '<div class="err" id="adminErr" style="color:var(--red);font-size:.88rem;margin-bottom:10px"></div>' +
-    '<button class="btn dark block" type="submit">Create Password &amp; Enter Admin</button>' +
-    '<p style="color:var(--muted);font-size:.86rem;margin-top:10px">This password protects the Admin Panel. Once you sign in, the panel stays open until you tap Logout.</p></form></div></section>';
-  }
   if (!adminAuthed){
-    return pageHead("Admin <em>Login</em>", "Enter the admin password once — you stay signed in until you tap Logout.") +
+    if (adminCreated===false && !adminForceSignIn){
+      return pageHead("Admin <em>Setup</em>", "Owner only — this sign-in is not linked anywhere on the shop. Create your admin account once; after that you sign in with the same email and password, and every change you make is saved to the shared database for all visitors.") +
+      '<section class="sec"><div class="wrap" style="max-width:480px"><form class="formcard" id="adminCreateForm">' +
+      '<div class="field"><label>Admin Email</label><input name="email" type="email" autocomplete="email" placeholder="you@example.com" /></div>' +
+      '<div class="field"><label>Create Password</label><input name="pass" type="password" autocomplete="new-password" placeholder="At least 6 characters" /></div>' +
+      '<div class="err" id="adminErr" style="color:var(--red);font-size:.88rem;margin-bottom:10px"></div>' +
+      '<button class="btn dark block" type="submit">Create Admin Account &amp; Enter Admin</button>' +
+      '<p style="color:var(--muted);font-size:.86rem;margin-top:10px">One-time setup. Creating the account also uploads the current catalogue to the database, so the shop starts shared right away. You stay signed in until you tap Logout.</p>' +
+      '<p style="margin-top:10px"><button class="btn ghost sm" type="button" id="showSignInBtn">Already created your account? Sign in</button></p></form></div></section>';
+    }
+    return pageHead("Admin <em>Login</em>", "Sign in with your admin email and password — you stay signed in until you tap Logout. Changes you make are saved to the shared database for every visitor.") +
     '<section class="sec"><div class="wrap" style="max-width:480px"><form class="formcard" id="adminLoginForm">' +
-    '<div class="field"><label>Admin Password</label><input name="pass" type="password" placeholder="Password" /></div>' +
+    (adminNotice ? '<div class="manualbox" style="margin-bottom:14px">'+esc(adminNotice)+'</div>' : '') +
+    '<div class="field"><label>Admin Email</label><input name="email" type="email" autocomplete="email" placeholder="you@example.com" /></div>' +
+    '<div class="field"><label>Password</label><input name="pass" type="password" autocomplete="current-password" placeholder="Password" /></div>' +
     '<div class="err" id="adminErr" style="color:var(--red);font-size:.88rem;margin-bottom:10px"></div>' +
     '<button class="btn dark block" type="submit">Login to Admin</button></form></div></section>';
   }
@@ -1544,30 +1785,68 @@ function adminHTML(){
       '<button class="btn dark" type="submit">Save Settings</button> ' +
       '<button class="btn ghost" type="button" id="adminLogout">Logout of Admin</button></form>' +
       '<form class="formcard" id="changePassForm" style="margin-top:20px"><h3 style="margin-bottom:14px">Change Admin Password</h3>' +
-      '<div class="grid2"><div class="field"><label>Current Password</label><input name="cur" type="password" placeholder="Current password" /></div>' +
-      '<div class="field"><label>New Password</label><input name="next" type="password" placeholder="At least 6 characters" /></div></div>' +
+      '<div class="field"><label>New Password</label><input name="next" type="password" autocomplete="new-password" placeholder="At least 6 characters" /></div>' +
       '<div class="err" id="passErr" style="color:var(--red);font-size:.88rem;margin-bottom:10px"></div>' +
       '<button class="btn dark" type="submit">Change Password</button>' +
-      '<p style="color:var(--muted);font-size:.86rem;margin-top:8px">The password protects this panel for this browser session on this public copy.</p></form>';
+      '<p style="color:var(--muted);font-size:.86rem;margin-top:8px">Admin sign-in uses your email and password, kept securely by the account service. You are already signed in, so no current password is needed here.</p></form>' +
+      '<form class="formcard" id="resetCatalogForm" style="margin-top:20px"><h3 style="margin-bottom:10px">Reset to Original Catalogue</h3>' +
+      '<p style="color:var(--muted);margin-bottom:12px">Products, photos, prices, categories and shop settings you change in this Admin panel are saved to the shared database, so every visitor sees them. This reset removes every saved change — from the database and this browser — and brings back the catalogue the site was published with, for everyone.</p>' +
+      '<button class="btn ghost" type="submit" style="color:var(--red);border-color:var(--red)">Reset to Original Catalogue</button></form>';
   }
-  return pageHead("Admin <em>Dashboard</em>", "Owner only — manage products, orders, exchange requests and shop settings for this session.") +
+  return pageHead("Admin <em>Dashboard</em>", "Owner only — manage products, orders, exchange requests and shop settings. Product, category and settings changes are saved to the shared database, so every visitor sees them.") +
   '<section class="sec"><div class="wrap">' +
-  '<div class="adminbar"><span class="pill-status">🔒 Owner signed in</span><span style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn ghost sm" data-nav="home">View Shop</button><button class="btn dark sm" type="button" id="adminLogoutTop">Logout</button></span></div>' +
+  '<div class="adminbar"><span class="pill-status">🔒 Owner signed in'+(sbSession && sbSession.email ? ' · '+esc(sbSession.email) : '')+'</span><span style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn ghost sm" data-nav="home">View Shop</button><button class="btn dark sm" type="button" id="adminLogoutTop">Logout</button></span></div>' +
   '<div class="admintabs">' + tabs.map(function(t){ return '<button class="chip'+(adminTab===t[0]?" on":"")+'" data-atab="'+t[0]+'">'+t[1]+'</button>'; }).join("") + '</div>' +
+  (dbSaveError ? '<div class="manualbox" style="border-color:var(--red);margin-bottom:16px">⚠️ <b>Not saved to the shared database yet.</b> Your latest change is kept on this page, but other visitors cannot see it until it saves. Check your internet connection, then tap Retry Save.<br/><button class="btn dark sm" type="button" id="dbRetryBtn" style="margin-top:8px">Retry Save</button></div>' : '') +
+  (adminSaveError ? '<div class="manualbox" style="border-color:var(--red);margin-bottom:16px">⚠️ <b>Some changes could not be cached in this browser</b> — its storage is full, most likely because a product photo is too large. They are still saved to the shared database while you are signed in. To keep a local cache copy too, remove the photo or upload a smaller one, then save the product again.</div>' : '') +
   body + '</div></section>';
 }
 document.addEventListener("submit", function(e){
-  if (e.target.id==="adminSetupForm"){
+  if (e.target.id==="adminCreateForm"){
     e.preventDefault();
-    var p = e.target.elements.pass.value;
-    if (p.length<6){ $("#adminErr").textContent = "Password must be at least 6 characters."; return; }
-    adminPass = p; adminAuthed = true; toast("✅ Admin password created — you are signed in.");
-    render("admin", true);
+    var cf = e.target;
+    var cEmail = cf.elements.email.value.trim(), cPass = cf.elements.pass.value;
+    var cErr = $("#adminErr");
+    if (!/.+@.+\..+/.test(cEmail)){ cErr.textContent = "Please enter a valid email address."; return; }
+    if (cPass.length<6){ cErr.textContent = "Password must be at least 6 characters."; return; }
+    var cBtn = cf.querySelector("button[type=submit]");
+    if (cBtn){ cBtn.disabled = true; cBtn.textContent = "Creating account…"; }
+    sbAuth("/auth/v1/signup", { email: cEmail, password: cPass }, function(ok, d){
+      if (ok && d && d.access_token){
+        saveSbSession(d); adminAuthed = true; adminCreated = true; adminNotice = "";
+        completeFirstSetup();
+        toast("✅ Admin account created — you are signed in. The catalogue is now shared with every visitor.");
+        render("admin", true);
+      } else if (ok && d && d.id){
+        adminForceSignIn = true;
+        adminNotice = "✅ Account created. Please check your email to confirm it, then sign in below with the same email and password.";
+        render("admin", true);
+      } else {
+        if (cBtn){ cBtn.disabled = false; cBtn.textContent = "Create Admin Account & Enter Admin"; }
+        var ce = $("#adminErr"); if (ce) ce.textContent = sbErrMsg(d);
+      }
+    });
   }
   if (e.target.id==="adminLoginForm"){
     e.preventDefault();
-    if (e.target.elements.pass.value!==adminPass){ $("#adminErr").textContent = "Incorrect password."; return; }
-    adminAuthed = true; render("admin", true);
+    var lf = e.target;
+    var lEmail = lf.elements.email.value.trim(), lPass = lf.elements.pass.value;
+    var lErr = $("#adminErr");
+    if (!/.+@.+\..+/.test(lEmail)){ lErr.textContent = "Please enter your admin email address."; return; }
+    if (!lPass){ lErr.textContent = "Please enter your password."; return; }
+    var lBtn = lf.querySelector("button[type=submit]");
+    if (lBtn){ lBtn.disabled = true; lBtn.textContent = "Signing in…"; }
+    sbAuth("/auth/v1/token?grant_type=password", { email: lEmail, password: lPass }, function(ok, d){
+      if (ok && d && d.access_token){
+        saveSbSession(d); adminAuthed = true; adminNotice = "";
+        completeFirstSetup();
+        toast("✅ Signed in — welcome back! Changes you make go live for everyone.");
+        render("admin", true);
+      } else {
+        if (lBtn){ lBtn.disabled = false; lBtn.textContent = "Login to Admin"; }
+        var le = $("#adminErr"); if (le) le.textContent = sbErrMsg(d);
+      }
+    });
   }
   if (e.target.id==="productForm"){
     e.preventDefault();
@@ -1599,6 +1878,7 @@ document.addEventListener("submit", function(e){
       products.unshift(data);
       toast("✅ Product <b>"+esc(name)+"</b> added to the shop.");
     }
+    persistAdminData();
     adminFormMode = null; adminFormId = null; adminFormImg = ""; adminFormImgKey = null;
     render("admin", true);
   }
@@ -1609,21 +1889,43 @@ document.addEventListener("submit", function(e){
     if (adminCatEditId){
       for (var ci=0; ci<categories.length; ci++) if (categories[ci].id===adminCatEditId){ categories[ci].name = n; categories[ci].blurb = e.target.elements.blurb.value.trim() || categories[ci].blurb; }
       adminCatEditId = null;
+      persistAdminData();
       buildNav(); toast("✅ Category updated."); render("admin", true); return;
     }
     var id = n.toLowerCase().replace(/[^a-z0-9]+/g,"-");
     if (!CAT_ICON[id]) CAT_ICON[id] = "acc";
     categories.push({ id:id, name:n, blurb: e.target.elements.blurb.value.trim() || "Shop products" });
+    persistAdminData();
     buildNav(); toast("✅ Category added."); render("admin", true);
   }
   if (e.target.id==="changePassForm"){
     e.preventDefault();
     var pf = e.target;
-    if (pf.elements.cur.value!==adminPass){ $("#passErr").textContent = "Current password is incorrect."; return; }
-    if (pf.elements.next.value.length<6){ $("#passErr").textContent = "New password must be at least 6 characters."; return; }
-    adminPass = pf.elements.next.value;
-    toast("✅ Admin password changed for this session.");
-    render("admin", true);
+    var np = pf.elements.next.value;
+    if (np.length<6){ $("#passErr").textContent = "New password must be at least 6 characters."; return; }
+    if (!sbSession){ $("#passErr").textContent = "You are not signed in."; return; }
+    var pwRetried = false;
+    function doPwPut(){
+      fetch(SB_URL + "/auth/v1/user", {
+        method: "PUT",
+        headers: { "apikey": SB_ANON, "Authorization": "Bearer " + sbSession.access_token, "Content-Type": "application/json" },
+        body: JSON.stringify({ password: np })
+      }).then(function(r){
+        return r.json().then(function(d){ return { ok: r.ok, status: r.status, d: d }; }).catch(function(){ return { ok: r.ok, status: r.status, d: {} }; });
+      }).then(function(res){
+        if (res.ok){ toast("✅ Admin password changed."); render("admin", true); return; }
+        if (res.status===401 && !pwRetried){
+          pwRetried = true;
+          sbRefreshSession(function(st){
+            if (st==="ok") doPwPut();
+            else { var e2 = $("#passErr"); if (e2) e2.textContent = "Your session expired — please sign in again."; }
+          });
+          return;
+        }
+        var e3 = $("#passErr"); if (e3) e3.textContent = sbErrMsg(res.d);
+      }).catch(function(){ var e4 = $("#passErr"); if (e4) e4.textContent = "Could not reach the account service — check your connection and try again."; });
+    }
+    doPwPut();
   }
   if (e.target.id==="settingsForm"){
     e.preventDefault();
@@ -1632,12 +1934,32 @@ document.addEventListener("submit", function(e){
     settings.outsideFee = +f2.elements.outsideFee.value||0;
     settings.insideTime = f2.elements.insideTime.value.trim() || settings.insideTime;
     settings.outsideTime = f2.elements.outsideTime.value.trim() || settings.outsideTime;
-    toast("✅ Settings saved for this session.");
+    persistAdminData();
+    toast("✅ Settings saved — kept in this browser.");
+    render("admin", true);
+  }
+  if (e.target.id==="resetCatalogForm"){
+    e.preventDefault();
+    try { localStorage.removeItem(CATALOG_KEY); } catch(_){}
+    if (SEED_CATALOG){
+      products = JSON.parse(JSON.stringify(SEED_CATALOG.products));
+      categories = JSON.parse(JSON.stringify(SEED_CATALOG.categories));
+      settings = JSON.parse(JSON.stringify(SEED_CATALOG.settings));
+      categories.forEach(function(c){ if (!CAT_ICON[c.id]) CAT_ICON[c.id] = "acc"; });
+    }
+    adminSaveError = false;
+    dbSaveError = false;
+    adminFormMode = null; adminFormId = null; adminFormImg = ""; adminFormImgKey = null; adminCatEditId = null;
+    if (sbSession) sbUpsert("catalog", catalogDoc(), function(ok){ if (!ok){ dbSaveError = true; if (currentRoute==="admin") render("admin", true); } });
+    buildNav();
+    toast("↩️ Catalogue reset — the original products, categories and settings are back.");
     render("admin", true);
   }
 });
 document.addEventListener("click", function(e){
   if (e.target.closest && e.target.closest("#ownerGate")){ go("admin"); return; }
+  if (e.target.id==="showSignInBtn"){ adminForceSignIn = true; render("admin", true); return; }
+  if (e.target.id==="dbRetryBtn"){ sbPushDirty = true; runDbPush(); return; }
   var t = e.target.closest("[data-atab]"); if (t){ adminTab = t.getAttribute("data-atab"); render("admin", true); return; }
   var eo = e.target.closest("[data-pedit-open]");
   if (eo){ adminFormMode = "edit"; adminFormId = eo.getAttribute("data-pedit-open"); adminTab = "products"; render("admin", true); scrollToProductForm(); return; }
@@ -1652,12 +1974,12 @@ document.addEventListener("click", function(e){
   var fg = e.target.closest("[data-flag]"); if (fg){ fg.classList.toggle("on"); return; }
   var bg = e.target.closest("[data-bg]"); if (bg){ $all("#bgSwatches .swatch").forEach(function(s){ s.classList.remove("on"); }); bg.classList.add("on"); return; }
   var dp = e.target.closest("[data-pdup]");
-  if (dp){ var src = prod(dp.getAttribute("data-pdup")); if (src){ var copy = {}; for (var k in src) copy[k] = src[k]; copy.flags = src.flags.slice(); copy.specs = {}; for (var sk in src.specs) copy.specs[sk] = src.specs[sk]; copy.id = "p-" + Date.now().toString(36); copy.name = src.name + " (Copy)"; products.unshift(copy); toast("✅ Duplicated as <b>"+esc(copy.name)+"</b> — tap Edit to rename it."); } render("admin", true); return; }
-  var pd = e.target.closest("[data-pdel]"); if (pd){ var did = pd.getAttribute("data-pdel"); products = products.filter(function(p){ return p.id!==did; }); if (adminFormId===did){ adminFormMode = null; adminFormId = null; } toast("Product deleted."); render("admin", true); return; }
+  if (dp){ var src = prod(dp.getAttribute("data-pdup")); if (src){ var copy = {}; for (var k in src) copy[k] = src[k]; copy.flags = src.flags.slice(); copy.specs = {}; for (var sk in src.specs) copy.specs[sk] = src.specs[sk]; copy.id = "p-" + Date.now().toString(36); copy.name = src.name + " (Copy)"; products.unshift(copy); persistAdminData(); toast("✅ Duplicated as <b>"+esc(copy.name)+"</b> — tap Edit to rename it."); } render("admin", true); return; }
+  var pd = e.target.closest("[data-pdel]"); if (pd){ var did = pd.getAttribute("data-pdel"); products = products.filter(function(p){ return p.id!==did; }); if (adminFormId===did){ adminFormMode = null; adminFormId = null; } persistAdminData(); toast("Product deleted."); render("admin", true); return; }
   var ce = e.target.closest("[data-cedit]"); if (ce){ adminCatEditId = ce.getAttribute("data-cedit"); render("admin", true); return; }
   if (e.target.id==="catFormCancel"){ adminCatEditId = null; render("admin", true); return; }
-  var cd = e.target.closest("[data-cdel]"); if (cd){ var cid = cd.getAttribute("data-cdel"); categories = categories.filter(function(c){ return c.id!==cid; }); if (adminCatEditId===cid) adminCatEditId = null; buildNav(); toast("Category deleted."); render("admin", true); return; }
-  if (e.target.id==="adminLogout" || e.target.id==="adminLogoutTop"){ adminAuthed = false; toast("Logged out of Admin."); go("home"); }
+  var cd = e.target.closest("[data-cdel]"); if (cd){ var cid = cd.getAttribute("data-cdel"); categories = categories.filter(function(c){ return c.id!==cid; }); if (adminCatEditId===cid) adminCatEditId = null; persistAdminData(); buildNav(); toast("Category deleted."); render("admin", true); return; }
+  if (e.target.id==="adminLogout" || e.target.id==="adminLogoutTop"){ adminAuthed = false; clearSbSession(); adminNotice = ""; toast("Logged out of Admin."); go("home"); }
 });
 document.addEventListener("input", function(e){
   if (e.target.id==="adminProdSearch"){ adminProdQ = e.target.value; var pos = e.target.selectionStart; render("admin", true); var s = $("#adminProdSearch"); if (s){ s.focus(); try{ s.setSelectionRange(pos,pos); }catch(_){} } }
@@ -1685,7 +2007,7 @@ document.addEventListener("keydown", function(e){
 });
 document.addEventListener("change", function(e){
   var pe = e.target.getAttribute && e.target.getAttribute("data-pedit");
-  if (pe){ var parts = pe.split("|"); var p = prod(parts[0]); if (p){ p[parts[1]] = +e.target.value||0; toast("✅ "+esc(p.name)+" updated."); } return; }
+  if (pe){ var parts = pe.split("|"); var p = prod(parts[0]); if (p){ p[parts[1]] = +e.target.value||0; persistAdminData(); toast("✅ "+esc(p.name)+" updated."); } return; }
   var os = e.target.getAttribute && e.target.getAttribute("data-ostatus");
   if (os){ for (var i=0;i<orders.length;i++) if (orders[i].id===os){ orders[i].status = e.target.value; toast("Order "+os+" → <b>"+e.target.value+"</b>"); } return; }
   var xs = e.target.getAttribute && e.target.getAttribute("data-xstatus");
@@ -1726,6 +2048,8 @@ function render(route, keep){
 buildNav();
 applyTheme();
 render("home");
+sbLoadRemote();
+if (sbSession) sbRefreshSession(function(st){ if (st==="invalid"){ clearSbSession(); adminAuthed = false; if (currentRoute==="admin") render("admin", true); } });
 try{ if (window.location.hash==="#admin") go("admin"); }catch(_){}
 </script>
 </body>
