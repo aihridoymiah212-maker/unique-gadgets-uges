@@ -246,6 +246,22 @@ footer .flogo b{color:#fff;font-family:'Archivo';font-size:1.05rem;line-height:1
 .statcard b{font-family:'Archivo';font-size:1.5rem;display:block}
 .statcard span{color:var(--muted);font-size:.88rem}
 .admintabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.adminbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.aprodgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.aprodcard{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px;display:flex;gap:14px;align-items:flex-start}
+.aprodcard .athumb{width:74px;height:74px;border-radius:12px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.aprodcard .athumb svg{width:52%;height:52%}
+.aprodcard .ainfo{flex:1;min-width:0}
+.aprodcard h4{font-size:.98rem;margin-bottom:2px}
+.aprodcard .ameta{color:var(--muted);font-size:.83rem}
+.aprodcard .aprice{font-family:'Archivo';font-weight:800;margin-top:4px}
+.aprodcard .aprice .old{color:var(--muted);text-decoration:line-through;font-weight:600;font-size:.85rem;margin-left:6px}
+.flagchip{display:inline-block;background:var(--soft);border:1px solid var(--line);border-radius:999px;font-size:.72rem;font-weight:700;padding:2px 9px;margin:2px 2px 0 0;text-transform:capitalize}
+.pform-chips{display:flex;gap:8px;flex-wrap:wrap}
+.swatches{display:flex;gap:8px;flex-wrap:wrap}
+.swatch{width:38px;height:38px;min-height:38px;border-radius:10px;border:2px solid var(--line);padding:0}
+.swatch.on{border-color:var(--heading);box-shadow:0 0 0 2px var(--yellow)}
+@media(max-width:820px){.aprodgrid{grid-template-columns:1fr}}
 .pill-status{display:inline-block;padding:3px 10px;border-radius:999px;font-size:.78rem;font-weight:700;background:var(--soft);border:1px solid var(--line)}
 .empty{background:var(--soft2);border:2px dashed var(--line);border-radius:20px;padding:44px 20px;text-align:center;color:var(--muted)}
 .empty h3{color:var(--heading);margin-bottom:6px}
@@ -319,7 +335,6 @@ footer .flogo b{color:#fff;font-family:'Archivo';font-size:1.05rem;line-height:1
     <div class="tb-r">
       <a href="tel:+8801731909199">📞 01731-909199</a>
       <a href="#" data-nav="track">Track Order</a>
-      <a href="#" data-nav="admin">Admin</a>
       <button id="langBtn" style="color:var(--yellow);font-weight:800;min-height:32px;padding:2px 10px;border:1.5px solid var(--yellow);border-radius:999px" aria-label="Switch language">বাংলা</button>
     </div>
   </div>
@@ -408,7 +423,6 @@ footer .flogo b{color:#fff;font-family:'Archivo';font-size:1.05rem;line-height:1
         <a href="#" data-nav="refund">Return &amp; Refund Policy</a>
         <a href="#" data-nav="delivery">Delivery Information</a>
         <a href="#" data-nav="account">My Account</a>
-        <a href="#" data-nav="admin">Admin</a>
       </div>
       <div>
         <h4>Contact</h4>
@@ -419,7 +433,7 @@ footer .flogo b{color:#fff;font-family:'Archivo';font-size:1.05rem;line-height:1
         <a href="https://wa.me/8801731909199" target="_blank" rel="noopener">WhatsApp — 8801731909199</a>
       </div>
     </div>
-    <div class="fbottom">Copyright © 2026 Unique Gadgets &amp; Exchange STEP. All Rights Reserved.</div>
+    <div class="fbottom">Copyright © 2026 Unique Gadgets &amp; Exchange STEP. All Rights Reserved. <button id="ownerGate" aria-label="Shop owner sign in" title="Owner sign in" style="opacity:.4;color:#CFCABA;min-height:28px;padding:2px 6px;vertical-align:middle"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></button></div>
   </div>
 </footer>
 
@@ -467,32 +481,32 @@ var categories = [
 
 var products = [
   { id:"demo-phone-1", name:"Demo Smartphone A15 (Sample)", brand:"DemoBrand", model:"A15", cat:"smartphones", price:18990, oldPrice:21990, stock:12, flags:["featured","new","best"], bg:"#FFF3C4",
-    desc:"Sample product listed so you can test the shop, cart and checkout. Replace it with a real phone, its real price and specifications from the Admin panel.",
-    specs:{Display:"6.5-inch (demo spec)", Storage:"128 GB (demo spec)", RAM:"8 GB (demo spec)", Battery:"5000 mAh (demo spec)"}, warranty:"Demo listing — set the real warranty in Admin" },
+    desc:"Sample product listed so you can test the shop, cart and checkout. Replace it with a real phone, its real price and specifications.",
+    specs:{Display:"6.5-inch (demo spec)", Storage:"128 GB (demo spec)", RAM:"8 GB (demo spec)", Battery:"5000 mAh (demo spec)"}, warranty:"Demo listing — the shop will set the real warranty" },
   { id:"demo-phone-2", name:"Demo Smartphone X9 Pro (Sample)", brand:"DemoBrand", model:"X9 Pro", cat:"smartphones", price:32990, oldPrice:36990, stock:5, flags:["featured","best","offer"], bg:"#FFE9C9",
-    desc:"Sample premium smartphone listing for layout and checkout testing only. Real model details belong in Admin.",
-    specs:{Display:"6.7-inch AMOLED (demo spec)", Storage:"256 GB (demo spec)", RAM:"12 GB (demo spec)", Camera:"108 MP main (demo spec)"}, warranty:"Demo listing — set the real warranty in Admin" },
+    desc:"Sample premium smartphone listing for layout and checkout testing only.",
+    specs:{Display:"6.7-inch AMOLED (demo spec)", Storage:"256 GB (demo spec)", RAM:"12 GB (demo spec)", Camera:"108 MP main (demo spec)"}, warranty:"Demo listing — the shop will set the real warranty" },
   { id:"demo-watch-1", name:"Demo Smartwatch Fit S (Sample)", brand:"DemoBrand", model:"Fit S", cat:"smartwatches", price:3490, oldPrice:4290, stock:20, flags:["featured","new"], bg:"#E9F7E4",
-    desc:"Sample smartwatch listing for testing. Add the real watch, price and features from the Admin panel.",
-    specs:{Display:"1.43-inch AMOLED (demo spec)", Battery:"Up to 10 days (demo spec)", "Water Rating":"5 ATM (demo spec)"}, warranty:"Demo listing — set the real warranty in Admin" },
+    desc:"Sample smartwatch listing for testing. The shop will add the real watch, price and features.",
+    specs:{Display:"1.43-inch AMOLED (demo spec)", Battery:"Up to 10 days (demo spec)", "Water Rating":"5 ATM (demo spec)"}, warranty:"Demo listing — the shop will set the real warranty" },
   { id:"demo-watch-2", name:"Demo Smartwatch Ultra (Sample)", brand:"DemoBrand", model:"Ultra", cat:"smartwatches", price:5990, oldPrice:0, stock:3, flags:["best"], bg:"#E4F0FF",
     desc:"Sample smartwatch listing for testing. Low demo stock shows how the low-stock label works.",
-    specs:{Display:"1.9-inch (demo spec)", Calling:"Bluetooth calling (demo spec)", GPS:"Built-in (demo spec)"}, warranty:"Demo listing — set the real warranty in Admin" },
+    specs:{Display:"1.9-inch (demo spec)", Calling:"Bluetooth calling (demo spec)", GPS:"Built-in (demo spec)"}, warranty:"Demo listing — the shop will set the real warranty" },
   { id:"demo-buds-1", name:"Demo TWS Earbuds Air (Sample)", brand:"DemoBrand", model:"Air", cat:"earbuds", price:1790, oldPrice:2490, stock:35, flags:["featured","best","offer"], bg:"#FFE4EC",
     desc:"Sample true-wireless earbuds listing for testing search, filters and checkout.",
-    specs:{Driver:"11 mm (demo spec)", Battery:"30 hours with case (demo spec)", Bluetooth:"5.3 (demo spec)"}, warranty:"Demo listing — set the real warranty in Admin" },
+    specs:{Driver:"11 mm (demo spec)", Battery:"30 hours with case (demo spec)", Bluetooth:"5.3 (demo spec)"}, warranty:"Demo listing — the shop will set the real warranty" },
   { id:"demo-buds-2", name:"Demo Neckband Flex (Sample)", brand:"DemoBrand", model:"Flex", cat:"earbuds", price:990, oldPrice:1290, stock:0, flags:["offer"], bg:"#EFE7FF",
     desc:"Sample neckband listing. Demo stock is zero so you can see the out-of-stock state and disabled Add to Cart.",
-    specs:{Battery:"40 hours (demo spec)", Charging:"USB-C fast charge (demo spec)"}, warranty:"Demo listing — set the real warranty in Admin" },
+    specs:{Battery:"40 hours (demo spec)", Charging:"USB-C fast charge (demo spec)"}, warranty:"Demo listing — the shop will set the real warranty" },
   { id:"demo-speaker-1", name:"Demo Bluetooth Speaker Boom (Sample)", brand:"DemoBrand", model:"Boom", cat:"speakers", price:2790, oldPrice:3490, stock:14, flags:["featured","new","offer"], bg:"#FFF0D6",
-    desc:"Sample portable speaker listing for testing. Replace with the real speaker in Admin.",
-    specs:{Output:"20 W (demo spec)", Battery:"12 hours (demo spec)", Rating:"IPX6 (demo spec)"}, warranty:"Demo listing — set the real warranty in Admin" },
+    desc:"Sample portable speaker listing for testing. The shop will replace it with the real speaker.",
+    specs:{Output:"20 W (demo spec)", Battery:"12 hours (demo spec)", Rating:"IPX6 (demo spec)"}, warranty:"Demo listing — the shop will set the real warranty" },
   { id:"demo-acc-1", name:"Demo Fast Charger 25W (Sample)", brand:"DemoBrand", model:"25W GaN", cat:"accessories", price:850, oldPrice:1100, stock:50, flags:["best","new"], bg:"#E6FBF2",
-    desc:"Sample accessory listing for testing. Add real chargers, cables and covers from Admin.",
-    specs:{Output:"25 W USB-C PD (demo spec)", Input:"100–240 V (demo spec)"}, warranty:"Demo listing — set the real warranty in Admin" },
+    desc:"Sample accessory listing for testing. The shop will add real chargers, cables and covers.",
+    specs:{Output:"25 W USB-C PD (demo spec)", Input:"100–240 V (demo spec)"}, warranty:"Demo listing — the shop will set the real warranty" },
   { id:"demo-acc-2", name:"Demo Phone Cover & Glass Set (Sample)", brand:"DemoBrand", model:"Cover Set", cat:"accessories", price:450, oldPrice:0, stock:8, flags:["offer"], bg:"#FDEBD3",
     desc:"Sample accessory bundle listing for testing the Special Offers section.",
-    specs:{Includes:"Back cover + tempered glass (demo spec)", Fit:"Universal demo fit"}, warranty:"Demo listing — set the real warranty in Admin" }
+    specs:{Includes:"Back cover + tempered glass (demo spec)", Fit:"Universal demo fit"}, warranty:"Demo listing — the shop will set the real warranty" }
 ];
 
 var cart = {};            /* productId -> qty (this session) */
@@ -502,6 +516,7 @@ var exchanges = [];       /* exchange requests this session */
 var users = {};           /* phone -> {name, phone, pass, address} */
 var currentUser = null;
 var adminPass = null, adminAuthed = false, adminTab = "overview";
+var adminProdQ = "", adminProdCat = "all", adminFormMode = null, adminFormId = null, adminCatEditId = null;
 var shopState = { cat:"all", q:"", sort:"featured" };
 var heroIdx = 0, heroTimer = null;
 var detailId = null, detailQty = 1, detailShade = 0;
@@ -525,9 +540,10 @@ function catName(id){ for (var i=0;i<categories.length;i++) if (categories[i].id
 function catCount(id){ return products.filter(function(p){ return p.cat===id; }).length; }
 function discount(p){ return p.oldPrice && p.oldPrice>p.price ? Math.round((1-p.price/p.oldPrice)*100) : 0; }
 function stockLabel(p){
+  var demo = p.id.indexOf("demo-")===0;
   if (p.stock<=0) return '<span class="stock out">Out of Stock</span>';
-  if (p.stock<=5) return '<span class="stock low">Low Stock — only '+p.stock+' left (demo stock)</span>';
-  return '<span class="stock in">In Stock (demo stock: '+p.stock+')</span>';
+  if (p.stock<=5) return '<span class="stock low">Low Stock — only '+p.stock+' left'+(demo?' (demo stock)':'')+'</span>';
+  return '<span class="stock in">In Stock'+(demo?' (demo stock: '+p.stock+')':'')+'</span>';
 }
 function waLink(text){ return "https://wa.me/"+WA_NUM+"?text="+encodeURIComponent(text); }
 var toastTimer = null;
@@ -554,7 +570,7 @@ function navLabel(n){ return lang==="bn" ? n[2] : n[1]; }
 function buildNav(){
   $("#mainNav").innerHTML = NAV.map(function(n){ return '<a href="#" data-nav="'+n[0]+'">'+navLabel(n)+'</a>'; }).join("");
   $("#mobileMenu").innerHTML = NAV.map(function(n){ return '<a href="#" data-nav="'+n[0]+'">'+navLabel(n)+'</a>'; }).join("") +
-    '<a href="#" data-nav="track">'+tx("Track Order","অর্ডার ট্র্যাক করুন")+'</a><a href="#" data-nav="cart">'+tx("Cart","কার্ট")+'</a><a href="#" data-nav="account">'+tx("My Account","আমার অ্যাকাউন্ট")+'</a><a href="#" data-nav="admin">Admin</a>';
+    '<a href="#" data-nav="track">'+tx("Track Order","অর্ডার ট্র্যাক করুন")+'</a><a href="#" data-nav="cart">'+tx("Cart","কার্ট")+'</a><a href="#" data-nav="account">'+tx("My Account","আমার অ্যাকাউন্ট")+'</a>';
 }
 document.addEventListener("click", function(e){
   if (e.target.id==="langBtn"){
@@ -593,12 +609,12 @@ function cardHTML(p){
   var d = discount(p);
   return '<article class="pcard">' +
     '<div class="pimg" style="background:'+esc(p.bg||"#FFF3C4")+'">' +
-      (d ? '<span class="badge">-'+d+'%</span>' : '<span class="badge demo">DEMO</span>') +
+      (d ? '<span class="badge">-'+d+'%</span>' : (p.id.indexOf("demo-")===0 ? '<span class="badge demo">DEMO</span>' : '')) +
       '<button class="wishbtn'+(wishlist[p.id]?" active":"")+'" data-wish="'+p.id+'" aria-label="Add to wishlist">'+ICONS.heart+'</button>' +
       ICONS[CAT_ICON[p.cat]||"acc"] +
     '</div>' +
     '<div class="pbody">' +
-      '<span class="pcat">'+esc(catName(p.cat))+' · Demo</span>' +
+      '<span class="pcat">'+esc(catName(p.cat))+(p.id.indexOf("demo-")===0 ? ' · Demo' : '')+'</span>' +
       '<h3>'+esc(p.name)+'</h3>' +
       '<div class="price"><span class="now">'+fmt(p.price)+'</span>' + (p.oldPrice? '<span class="old">'+fmt(p.oldPrice)+'</span>' : '') + '</div>' +
       stockLabel(p) +
@@ -609,10 +625,10 @@ function cardHTML(p){
     '</div></article>';
 }
 function gridHTML(list){
-  if (!list.length) return '<div class="empty"><h3>No products found</h3><p>Try a different search or category — or add products from the Admin panel.</p></div>';
+  if (!list.length) return '<div class="empty"><h3>No products found</h3><p>Try a different search or category.</p></div>';
   return '<div class="pgrid">'+list.map(cardHTML).join("")+'</div>';
 }
-var DEMO_NOTE = '<div class="demo-note"><b>Demo catalogue:</b> the products below are clearly-marked sample listings so every shop feature can be tested. Real products, prices and stock are added by the shop from the <a href="#" data-nav="admin" style="text-decoration:underline;font-weight:700">Admin panel</a>.</div>';
+var DEMO_NOTE = '<div class="demo-note"><b>Demo catalogue:</b> the products below are clearly-marked sample listings so every shop feature can be tested. The shop is adding its real products, prices and stock — check back soon for the full range.</div>';
 
 /* ---------- cart / wishlist actions ---------- */
 function addToCart(id, qty){
@@ -761,7 +777,7 @@ function homeHTML(){
     '<li>📞 <a href="tel:+8801673912474">01673-912474</a></li>' +
     '<li>💬 <a href="https://wa.me/'+WA_NUM+'" target="_blank" rel="noopener">WhatsApp: 8801731909199</a></li>' +
     '<li>📘 <a href="https://facebook.com/fb.unique.gadget" target="_blank" rel="noopener">facebook.com/fb.unique.gadget</a></li>' +
-    '<li>🚚 <span>Delivery: inside Tangail '+fmt(settings.insideFee)+' · outside Tangail '+fmt(settings.outsideFee)+' · all Bangladesh (default charges — the shop can change them any time in Admin Settings)</span></li>' +
+    '<li>🚚 <span>Delivery: inside Tangail '+fmt(settings.insideFee)+' · outside Tangail '+fmt(settings.outsideFee)+' · all Bangladesh (default charges — the shop can update them any time)</span></li>' +
     '</ul><div style="margin-top:18px"><button class="btn" data-nav="contact">Contact &amp; Directions</button></div></div></div></div></section>' +
   '<section class="sec" style="padding-top:6px"><div class="wrap"><div class="newsletter">' +
     '<h2>Get Gadget Deals First</h2><p>Subscribe for new arrivals and special offers from UGES. (Demo form on this copy — subscriptions are noted for this session only.)</p>' +
@@ -818,20 +834,20 @@ function detailHTML(){
   var related = products.filter(function(x){ return x.cat===p.cat && x.id!==p.id; }).slice(0,4);
   var d = discount(p);
   var specRows = Object.keys(p.specs||{}).map(function(k){ return '<tr><td>'+esc(k)+'</td><td>'+esc(p.specs[k])+'</td></tr>'; }).join("");
-  return pageHead(esc(p.name), catName(p.cat)+" · "+esc(p.brand)+" · Demo product") +
+  return pageHead(esc(p.name), catName(p.cat)+" · "+esc(p.brand)+(p.id.indexOf("demo-")===0 ? " · Demo product" : "")) +
   '<section class="sec"><div class="wrap"><div class="detaillayout"><div>' +
     '<div class="galmain" style="background:'+shades[detailShade]+'">'+ICONS[CAT_ICON[p.cat]||"acc"]+'</div>' +
     '<div class="galthumbs">' + shades.map(function(s,i){ return '<button data-shade="'+i+'" class="'+(i===detailShade?"on":"")+'" style="background:'+s+'" aria-label="Gallery view '+(i+1)+'">'+ICONS[CAT_ICON[p.cat]||"acc"]+'</button>'; }).join("") + '</div>' +
-    '<p style="color:var(--muted);font-size:.88rem;margin-top:10px">Illustrated gallery views — real product photos are added by the shop in Admin.</p>' +
+    '<p style="color:var(--muted);font-size:.88rem;margin-top:10px">Illustrated gallery views shown for this listing.</p>' +
   '</div><div>' +
-    '<span class="tagchip">Demo Product</span>' +
+    (p.id.indexOf("demo-")===0 ? '<span class="tagchip">Demo Product</span>' : '<span class="tagchip">'+esc(catName(p.cat))+'</span>') +
     '<div class="price" style="margin:14px 0 6px"><span class="now" style="font-size:1.7rem">'+fmt(p.price)+'</span>' + (p.oldPrice? '<span class="old" style="font-size:1.05rem">'+fmt(p.oldPrice)+'</span><span class="badge" style="position:static">-'+d+'% OFF</span>' : '') + '</div>' +
     stockLabel(p) +
     '<p style="margin:14px 0">'+esc(p.desc)+'</p>' +
     '<table class="spec-table"><tr><td>Brand</td><td>'+esc(p.brand)+'</td></tr><tr><td>Model</td><td>'+esc(p.model)+'</td></tr><tr><td>Warranty</td><td>'+esc(p.warranty)+'</td></tr>'+specRows+'</table>' +
     '<div style="display:flex;gap:12px;align-items:center;margin:20px 0;flex-wrap:wrap"><span style="font-weight:700">Quantity</span>' +
       '<span class="qtyctl"><button data-dqty="-1" aria-label="Decrease quantity">−</button><span>'+detailQty+'</span><button data-dqty="1" aria-label="Increase quantity">+</button></span>' +
-      '<span style="color:var(--muted);font-size:.88rem">Max '+(p.stock)+' (demo stock)</span></div>' +
+      '<span style="color:var(--muted);font-size:.88rem">Max '+p.stock+(p.id.indexOf("demo-")===0 ? ' (demo stock)' : '')+'</span></div>' +
     '<div style="display:flex;gap:10px;flex-wrap:wrap">' +
       '<button class="btn dark" data-dadd '+(p.stock<=0?"disabled":"")+'>Add to Cart</button>' +
       '<button class="btn" data-dbuy '+(p.stock<=0?"disabled":"")+'>Buy Now</button>' +
@@ -869,7 +885,7 @@ function cartHTML(){
   var rows = ids.map(function(id){
     var p = prod(id); if (!p) return "";
     return '<div class="cartrow"><div class="cthumb" style="background:'+esc(p.bg||"#FFF3C4")+'">'+ICONS[CAT_ICON[p.cat]||"acc"]+'</div>' +
-      '<div style="flex:1;min-width:120px"><b>'+esc(p.name)+'</b><br/><span style="color:var(--muted);font-size:.88rem">'+fmt(p.price)+' each · demo stock '+p.stock+'</span></div>' +
+      '<div style="flex:1;min-width:120px"><b>'+esc(p.name)+'</b><br/><span style="color:var(--muted);font-size:.88rem">'+fmt(p.price)+' each'+(p.id.indexOf("demo-")===0 ? ' · demo stock '+p.stock : '')+'</span></div>' +
       '<span class="qtyctl"><button data-cqty="'+id+'|-1" aria-label="Decrease">−</button><span>'+cart[id]+'</span><button data-cqty="'+id+'|1" aria-label="Increase">+</button></span>' +
       '<b style="min-width:86px;text-align:right">'+fmt(p.price*cart[id])+'</b>' +
       '<button data-cremove="'+id+'" aria-label="Remove item" style="font-size:1.15rem;padding:6px">✕</button></div>';
@@ -1258,16 +1274,67 @@ function policyHTML(kind){
     privacy: ["Privacy Policy", "We collect only the information needed to process your order or exchange request: your name, phone number, delivery address and order details. We use it to confirm and deliver your order and to contact you about it. We never sell your personal information, and we never store payment card details — this shop does not take card payments. For bKash or Nagad manual payments we only record the transaction ID you provide so the shop can verify receipt. You can ask us to update or remove your information any time by calling 01731-909199."],
     terms: ["Terms & Conditions", "Prices are shown in Bangladeshi Taka (BDT / ৳) and can change when the shop updates its catalogue. An order is confirmed only after the shop verifies it by phone or WhatsApp. Product availability depends on current stock. Delivery times are estimates. By placing an order you agree to provide an accurate phone number and delivery address so we can reach you."],
     refund: ["Return & Refund Policy", "If a product arrives damaged or different from what you ordered, contact us within 48 hours of delivery on 01731-909199 or WhatsApp with your order ID, and we will arrange a replacement or refund after checking the item. Products must be returned unused with all accessories and packaging for a refund. Change-of-mind returns are handled at the shop's discretion at the Tangail store. Refunds for manual bKash/Nagad payments are sent back to the same wallet after verification."],
-    delivery: ["Delivery Information", "We deliver inside Tangail and across all of Bangladesh. Current delivery charges on this site (default charges — the shop can update them any time from Admin Settings): Inside Tangail " + fmt(settings.insideFee) + " (estimated " + settings.insideTime + "), Outside Tangail " + fmt(settings.outsideFee) + " (estimated " + settings.outsideTime + "). The charge is calculated automatically at checkout from the delivery area you select, and the shop can update these charges at any time. Cash on Delivery is available; please keep the exact amount ready where possible."]
+    delivery: ["Delivery Information", "We deliver inside Tangail and across all of Bangladesh. Current delivery charges on this site (default charges — the shop can update them any time): Inside Tangail " + fmt(settings.insideFee) + " (estimated " + settings.insideTime + "), Outside Tangail " + fmt(settings.outsideFee) + " (estimated " + settings.outsideTime + "). The charge is calculated automatically at checkout from the delivery area you select, and the shop can update these charges at any time. Cash on Delivery is available; please keep the exact amount ready where possible."]
   };
   var pg = pages[kind] || pages.privacy;
   return pageHead(esc(pg[0])) + '<section class="sec"><div class="wrap" style="max-width:820px"><div class="formcard"><p style="font-size:1.02rem">'+esc(pg[1])+'</p><p style="margin-top:14px;color:var(--muted)">Questions? Call <a href="tel:+8801731909199" style="font-weight:700">01731-909199</a> or visit Victoria Road, Jahaj Building, 2nd Floor, Tangail Sadar, Tangail.</p></div></div></section>';
 }
 
 /* ---------- admin ---------- */
+function scrollToProductForm(){ var pf = $("#productForm"); if (pf) pf.scrollIntoView({ behavior:"smooth", block:"start" }); }
+function productFormHTML(p){
+  var isEdit = !!p;
+  p = p || { name:"", brand:"", model:"", cat:(categories[0]?categories[0].id:"accessories"), price:"", oldPrice:"", stock:"", flags:[], bg:SHADES[0], desc:"", warranty:"", specs:{} };
+  var specText = Object.keys(p.specs||{}).map(function(k){ return k+": "+p.specs[k]; }).join("\n");
+  var flagDefs = [["featured","Featured"],["new","New Arrival"],["best","Best Selling"],["offer","Special Offer"]];
+  return '<form class="formcard" id="productForm" style="margin-bottom:20px"><h3 style="margin-bottom:4px">'+(isEdit ? "Edit Product" : "Add New Product")+'</h3>' +
+  '<p style="color:var(--muted);margin-bottom:14px">'+(isEdit ? "Update any detail below — changes show in the shop right away (for this session)." : "Fill in the real product details — it appears in the shop right away (for this session).")+'</p>' +
+  '<div class="grid2"><div class="field"><label>Product Name <span class="req">*</span></label><input name="name" value="'+esc(p.name)+'" placeholder="e.g. Samsung Galaxy A55" /></div>' +
+  '<div class="field"><label>Category</label><select name="cat">'+categories.map(function(c){ return '<option value="'+c.id+'"'+(p.cat===c.id?" selected":"")+'>'+esc(c.name)+'</option>'; }).join("")+'</select></div></div>' +
+  '<div class="grid2"><div class="field"><label>Brand</label><input name="brand" value="'+esc(p.brand)+'" placeholder="Brand" /></div>' +
+  '<div class="field"><label>Model</label><input name="model" value="'+esc(p.model)+'" placeholder="Model" /></div></div>' +
+  '<div class="grid2"><div class="field"><label>Price (৳) <span class="req">*</span></label><input name="price" type="number" min="0" value="'+p.price+'" placeholder="0" /></div>' +
+  '<div class="field"><label>Old Price (৳, optional — shows a discount)</label><input name="oldPrice" type="number" min="0" value="'+(p.oldPrice||"")+'" placeholder="0" /></div></div>' +
+  '<div class="grid2"><div class="field"><label>Stock</label><input name="stock" type="number" min="0" value="'+p.stock+'" placeholder="0" /></div>' +
+  '<div class="field"><label>Card Colour</label><div class="swatches" id="bgSwatches">'+SHADES.map(function(s){ return '<button type="button" class="swatch'+(p.bg===s?" on":"")+'" data-bg="'+s+'" style="background:'+s+'" aria-label="Card colour '+s+'"></button>'; }).join("")+'</div></div></div>' +
+  '<div class="field"><label>Show in Sections (tap to toggle)</label><div class="pform-chips" id="flagChips">'+flagDefs.map(function(fd){ return '<button type="button" class="chip'+(p.flags.indexOf(fd[0])>=0?" on":"")+'" data-flag="'+fd[0]+'">'+fd[1]+'</button>'; }).join("")+'</div><p style="color:var(--muted);font-size:.85rem;margin-top:6px">No section selected = the product appears in the Shop only.</p></div>' +
+  '<div class="field"><label>Description</label><textarea name="desc" rows="3" placeholder="Short description shoppers will read">'+esc(p.desc)+'</textarea></div>' +
+  '<div class="field"><label>Specifications — one per line, written as Name: Value</label><textarea name="specs" rows="4" placeholder="Display: 6.5-inch AMOLED&#10;Storage: 128 GB&#10;Battery: 5000 mAh">'+esc(specText)+'</textarea></div>' +
+  '<div class="field"><label>Warranty</label><input name="warranty" value="'+esc(p.warranty)+'" placeholder="e.g. 1 year shop warranty" /></div>' +
+  '<div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn dark" type="submit">'+(isEdit ? "Save Changes" : "Add Product")+'</button>' +
+  '<button class="btn ghost" type="button" id="productFormCancel">Cancel</button></div></form>';
+}
+function adminProductsHTML(){
+  var list = products.filter(function(p){
+    if (adminProdCat!=="all" && p.cat!==adminProdCat) return false;
+    if (adminProdQ){
+      var q = adminProdQ.toLowerCase();
+      if ((p.name+" "+p.brand+" "+p.model).toLowerCase().indexOf(q)<0) return false;
+    }
+    return true;
+  });
+  var cards = list.length ? '<div class="aprodgrid">' + list.map(function(p){
+    var d = discount(p);
+    return '<div class="aprodcard"><div class="athumb" style="background:'+esc(p.bg||"#FFF3C4")+'">'+ICONS[CAT_ICON[p.cat]||"acc"]+'</div>' +
+      '<div class="ainfo"><h4>'+esc(p.name)+'</h4>' +
+      '<div class="ameta">'+esc(p.brand)+' · '+esc(p.model)+' · '+esc(catName(p.cat))+'</div>' +
+      '<div class="aprice">'+fmt(p.price)+(p.oldPrice ? '<span class="old">'+fmt(p.oldPrice)+'</span>' : '')+(d ? ' <span class="flagchip" style="background:var(--red);color:#fff;border-color:var(--red)">-'+d+'%</span>' : '')+'</div>' +
+      '<div class="ameta">Stock: <b style="color:'+(p.stock<=0 ? 'var(--red)' : p.stock<=5 ? 'var(--accent)' : 'var(--green)')+'">'+p.stock+'</b>'+(p.stock<=0 ? ' — Out of stock' : p.stock<=5 ? ' — Low stock' : '')+'</div>' +
+      '<div>'+(p.flags.length ? p.flags.map(function(fl){ return '<span class="flagchip">'+esc(fl)+'</span>'; }).join("") : '<span class="flagchip">shop only</span>')+'</div>' +
+      '<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap"><button class="btn dark sm" data-pedit-open="'+p.id+'">✎ Edit</button><button class="btn ghost sm" data-pdup="'+p.id+'">Duplicate</button><button class="btn ghost sm" data-pdel="'+p.id+'" style="color:var(--red);border-color:var(--red)">Delete</button></div>' +
+      '</div></div>';
+  }).join("") + '</div>' : '<div class="empty"><h3>No products match</h3><p>Try a different search, or add a new product.</p></div>';
+  var form = adminFormMode ? productFormHTML(adminFormMode==="edit" ? prod(adminFormId) : null) : "";
+  return '<div class="toolbar"><input type="search" id="adminProdSearch" placeholder="Search products to edit…" value="'+esc(adminProdQ)+'" aria-label="Search products in admin" />' +
+    '<select id="adminProdCat" aria-label="Filter by category"><option value="all">All Categories</option>' +
+    categories.map(function(c){ return '<option value="'+c.id+'"'+(adminProdCat===c.id?" selected":"")+'>'+esc(c.name)+'</option>'; }).join("") + '</select>' +
+    '<button class="btn dark sm" id="adminAddBtn" type="button">＋ Add New Product</button></div>' +
+    '<p style="color:var(--muted);margin-bottom:14px">Showing '+list.length+' of '+products.length+' products — tap <b>Edit</b> on any product to change its name, category, price, stock, description, specifications and sections.</p>' +
+    form + cards;
+}
 function adminHTML(){
   if (!adminPass){
-    return pageHead("Admin <em>Setup</em>", "First visit on this copy: create the admin password for this browser session.") +
+    return pageHead("Admin <em>Setup</em>", "Owner only — this sign-in is not linked anywhere on the shop. First visit on this copy: create the admin password for this browser session.") +
     '<section class="sec"><div class="wrap" style="max-width:480px"><form class="formcard" id="adminSetupForm">' +
     '<div class="field"><label>Create Admin Password</label><input name="pass" type="password" placeholder="At least 6 characters" /></div>' +
     '<div class="err" id="adminErr" style="color:var(--red);font-size:.88rem;margin-bottom:10px"></div>' +
@@ -1295,40 +1362,23 @@ function adminHTML(){
       '<div class="statcard"><b>'+low+'</b><span>Low Stock Products</span></div>' +
       '<div class="statcard"><b>'+exchanges.length+'</b><span>Exchange Requests</span></div>' +
       '<div class="statcard"><b>'+categories.length+'</b><span>Categories</span></div></div>' +
+      '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px"><button class="btn dark sm" data-atab="products">Manage Products</button><button class="btn ghost sm" type="button" id="ovAddProduct">＋ Add Product</button><button class="btn ghost sm" data-atab="orders">View Orders</button><button class="btn ghost sm" data-atab="settings">Shop Settings</button></div>' +
       '<div class="manualbox">Overview counts reflect this browser session on this public copy — demo orders and requests placed while testing appear here.</div>';
   }
   if (adminTab==="products"){
-    body = '<div class="tablewrap"><table class="atable"><thead><tr><th>Product</th><th>Category</th><th>Price (৳)</th><th>Old Price</th><th>Stock</th><th>Flags</th><th></th></tr></thead><tbody>' +
-      products.map(function(p){
-        return '<tr><td><b>'+esc(p.name)+'</b><br/><span style="color:var(--muted)">'+esc(p.brand)+' '+esc(p.model)+'</span></td><td>'+esc(catName(p.cat))+'</td>' +
-        '<td><input type="number" min="0" value="'+p.price+'" data-pedit="'+p.id+'|price" style="width:100px;border:2px solid var(--line);border-radius:8px;padding:4px 8px;min-height:38px" /></td>' +
-        '<td><input type="number" min="0" value="'+(p.oldPrice||0)+'" data-pedit="'+p.id+'|oldPrice" style="width:100px;border:2px solid var(--line);border-radius:8px;padding:4px 8px;min-height:38px" /></td>' +
-        '<td><input type="number" min="0" value="'+p.stock+'" data-pedit="'+p.id+'|stock" style="width:80px;border:2px solid var(--line);border-radius:8px;padding:4px 8px;min-height:38px" /></td>' +
-        '<td style="font-size:.82rem">'+p.flags.join(", ")+'</td>' +
-        '<td><button class="btn ghost sm" data-pdel="'+p.id+'">Delete</button></td></tr>';
-      }).join("") + '</tbody></table></div>' +
-      '<form class="formcard" id="addProductForm" style="margin-top:20px"><h3 style="margin-bottom:14px">Add Product</h3>' +
-      '<div class="grid2"><div class="field"><label>Product Name</label><input name="name" placeholder="Real product name" /></div>' +
-      '<div class="field"><label>Category</label><select name="cat">'+categories.map(function(c){ return '<option value="'+c.id+'">'+esc(c.name)+'</option>'; }).join("")+'</select></div></div>' +
-      '<div class="grid2"><div class="field"><label>Brand</label><input name="brand" placeholder="Brand" /></div>' +
-      '<div class="field"><label>Model</label><input name="model" placeholder="Model" /></div></div>' +
-      '<div class="grid2"><div class="field"><label>Price (৳)</label><input name="price" type="number" min="0" placeholder="0" /></div>' +
-      '<div class="field"><label>Old Price (৳, optional)</label><input name="oldPrice" type="number" min="0" placeholder="0" /></div></div>' +
-      '<div class="grid2"><div class="field"><label>Stock</label><input name="stock" type="number" min="0" placeholder="0" /></div>' +
-      '<div class="field"><label>Sections</label><select name="flags"><option value="featured">Featured</option><option value="new">New Arrival</option><option value="best">Best Selling</option><option value="offer">Special Offer</option><option value="">Shop only</option></select></div></div>' +
-      '<div class="field"><label>Description</label><textarea name="desc" rows="2" placeholder="Short description"></textarea></div>' +
-      '<div class="field"><label>Warranty</label><input name="warranty" placeholder="e.g. 1 year shop warranty" /></div>' +
-      '<button class="btn dark" type="submit">Add Product</button>' +
-      '<p style="color:var(--muted);font-size:.86rem;margin-top:8px">New products are real listings you add — they are not marked DEMO. Changes apply for this session.</p></form>';
+    body = adminProductsHTML();
   }
   if (adminTab==="categories"){
+    var ec = null;
+    if (adminCatEditId) for (var ei=0; ei<categories.length; ei++) if (categories[ei].id===adminCatEditId) ec = categories[ei];
     body = '<div class="tablewrap"><table class="atable"><thead><tr><th>Category</th><th>Products</th><th></th></tr></thead><tbody>' +
-      categories.map(function(c){ return '<tr><td><b>'+esc(c.name)+'</b><br/><span style="color:var(--muted)">'+esc(c.blurb)+'</span></td><td>'+catCount(c.id)+'</td><td><button class="btn ghost sm" data-cdel="'+c.id+'">Delete</button></td></tr>'; }).join("") +
+      categories.map(function(c){ return '<tr><td><b>'+esc(c.name)+'</b><br/><span style="color:var(--muted)">'+esc(c.blurb)+'</span></td><td>'+catCount(c.id)+'</td><td style="white-space:nowrap"><button class="btn dark sm" data-cedit="'+c.id+'">Edit</button> <button class="btn ghost sm" data-cdel="'+c.id+'">Delete</button></td></tr>'; }).join("") +
       '</tbody></table></div>' +
-      '<form class="formcard" id="addCatForm" style="margin-top:20px"><h3 style="margin-bottom:14px">Add Category</h3>' +
-      '<div class="grid2"><div class="field"><label>Category Name</label><input name="name" placeholder="e.g. Tablets" /></div>' +
-      '<div class="field"><label>Short Description</label><input name="blurb" placeholder="One line about it" /></div></div>' +
-      '<button class="btn dark" type="submit">Add Category</button></form>';
+      '<form class="formcard" id="addCatForm" style="margin-top:20px"><h3 style="margin-bottom:14px">'+(ec ? "Edit Category" : "Add Category")+'</h3>' +
+      '<div class="grid2"><div class="field"><label>Category Name</label><input name="name" placeholder="e.g. Tablets" value="'+(ec ? esc(ec.name) : "")+'" /></div>' +
+      '<div class="field"><label>Short Description</label><input name="blurb" placeholder="One line about it" value="'+(ec ? esc(ec.blurb) : "")+'" /></div></div>' +
+      '<button class="btn dark" type="submit">'+(ec ? "Save Changes" : "Add Category")+'</button>' +
+      (ec ? ' <button class="btn ghost" type="button" id="catFormCancel">Cancel</button>' : '') + '</form>';
   }
   if (adminTab==="orders"){
     var statuses = ["Order Placed","Confirmed","Processing","Shipped","Delivered","Cancelled"];
@@ -1364,10 +1414,17 @@ function adminHTML(){
       '<div class="field"><label>Outside Tangail Estimated Time</label><input name="outsideTime" value="'+esc(settings.outsideTime)+'" /></div></div>' +
       '<div class="manualbox">Store info on this site — Unique Gadgets &amp; Exchange STEP · Victoria Road, Jahaj Building, 2nd Floor, Tangail Sadar, Tangail · Phones 01731-909199 / 01673-912474 · WhatsApp 8801731909199 · Facebook fb.unique.gadget. Payment methods: Cash on Delivery (default), bKash &amp; Nagad (manual send-money to 01731-909199, verified by the shop — never auto-confirmed). Featured / New / Best / Offer sections are controlled by the Sections setting of each product in the Products tab.</div>' +
       '<button class="btn dark" type="submit">Save Settings</button> ' +
-      '<button class="btn ghost" type="button" id="adminLogout">Logout of Admin</button></form>';
+      '<button class="btn ghost" type="button" id="adminLogout">Logout of Admin</button></form>' +
+      '<form class="formcard" id="changePassForm" style="margin-top:20px"><h3 style="margin-bottom:14px">Change Admin Password</h3>' +
+      '<div class="grid2"><div class="field"><label>Current Password</label><input name="cur" type="password" placeholder="Current password" /></div>' +
+      '<div class="field"><label>New Password</label><input name="next" type="password" placeholder="At least 6 characters" /></div></div>' +
+      '<div class="err" id="passErr" style="color:var(--red);font-size:.88rem;margin-bottom:10px"></div>' +
+      '<button class="btn dark" type="submit">Change Password</button>' +
+      '<p style="color:var(--muted);font-size:.86rem;margin-top:8px">The password protects this panel for this browser session on this public copy.</p></form>';
   }
-  return pageHead("Admin <em>Dashboard</em>", "Unique Gadgets & Exchange STEP — manage products, orders, exchange requests and settings for this session.") +
+  return pageHead("Admin <em>Dashboard</em>", "Owner only — manage products, orders, exchange requests and shop settings for this session.") +
   '<section class="sec"><div class="wrap">' +
+  '<div class="adminbar"><span class="pill-status">🔒 Owner signed in</span><span style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn ghost sm" data-nav="home">View Shop</button><button class="btn dark sm" type="button" id="adminLogoutTop">Logout</button></span></div>' +
   '<div class="admintabs">' + tabs.map(function(t){ return '<button class="chip'+(adminTab===t[0]?" on":"")+'" data-atab="'+t[0]+'">'+t[1]+'</button>'; }).join("") + '</div>' +
   body + '</div></section>';
 }
@@ -1384,29 +1441,60 @@ document.addEventListener("submit", function(e){
     if (e.target.elements.pass.value!==adminPass){ $("#adminErr").textContent = "Incorrect password."; return; }
     adminAuthed = true; render("admin", true);
   }
-  if (e.target.id==="addProductForm"){
+  if (e.target.id==="productForm"){
     e.preventDefault();
     var f = e.target;
     var name = f.elements.name.value.trim(), price = +f.elements.price.value||0;
     if (name.length<3 || price<=0){ toast("⚠️ Give the product a name and a real price."); return; }
-    var flag = f.elements.flags.value;
-    products.unshift({
-      id: "p-" + Date.now().toString(36), name: name, brand: f.elements.brand.value.trim()||"—", model: f.elements.model.value.trim()||"—",
-      cat: f.elements.cat.value, price: price, oldPrice: +f.elements.oldPrice.value||0, stock: +f.elements.stock.value||0,
-      flags: flag ? [flag] : [], bg: SHADES[products.length % SHADES.length],
-      desc: f.elements.desc.value.trim() || "Product added by the shop.", specs: {}, warranty: f.elements.warranty.value.trim() || "Ask the shop for warranty details"
+    var flags = $all("#flagChips .chip.on").map(function(ch){ return ch.getAttribute("data-flag"); });
+    var bgBtn = $("#bgSwatches .swatch.on");
+    var specs = {};
+    f.elements.specs.value.split("\n").forEach(function(line){
+      var i = line.indexOf(":");
+      if (i>0){ var k = line.slice(0,i).trim(), v = line.slice(i+1).trim(); if (k && v) specs[k] = v; }
     });
-    toast("✅ Product <b>"+esc(name)+"</b> added.");
+    var data = {
+      name: name, brand: f.elements.brand.value.trim()||"—", model: f.elements.model.value.trim()||"—",
+      cat: f.elements.cat.value, price: price, oldPrice: +f.elements.oldPrice.value||0,
+      stock: Math.max(0, +f.elements.stock.value||0), flags: flags,
+      bg: bgBtn ? bgBtn.getAttribute("data-bg") : SHADES[0],
+      desc: f.elements.desc.value.trim() || "Product added by the shop.",
+      specs: specs, warranty: f.elements.warranty.value.trim() || "Ask the shop for warranty details"
+    };
+    if (adminFormMode==="edit" && prod(adminFormId)){
+      var target = prod(adminFormId);
+      for (var key in data) target[key] = data[key];
+      toast("✅ <b>"+esc(name)+"</b> updated — the shop now shows the changes.");
+    } else {
+      data.id = "p-" + Date.now().toString(36);
+      products.unshift(data);
+      toast("✅ Product <b>"+esc(name)+"</b> added to the shop.");
+    }
+    adminFormMode = null; adminFormId = null;
     render("admin", true);
   }
   if (e.target.id==="addCatForm"){
     e.preventDefault();
     var n = e.target.elements.name.value.trim();
     if (n.length<3){ toast("⚠️ Enter a category name."); return; }
+    if (adminCatEditId){
+      for (var ci=0; ci<categories.length; ci++) if (categories[ci].id===adminCatEditId){ categories[ci].name = n; categories[ci].blurb = e.target.elements.blurb.value.trim() || categories[ci].blurb; }
+      adminCatEditId = null;
+      buildNav(); toast("✅ Category updated."); render("admin", true); return;
+    }
     var id = n.toLowerCase().replace(/[^a-z0-9]+/g,"-");
     if (!CAT_ICON[id]) CAT_ICON[id] = "acc";
     categories.push({ id:id, name:n, blurb: e.target.elements.blurb.value.trim() || "Shop products" });
     buildNav(); toast("✅ Category added."); render("admin", true);
+  }
+  if (e.target.id==="changePassForm"){
+    e.preventDefault();
+    var pf = e.target;
+    if (pf.elements.cur.value!==adminPass){ $("#passErr").textContent = "Current password is incorrect."; return; }
+    if (pf.elements.next.value.length<6){ $("#passErr").textContent = "New password must be at least 6 characters."; return; }
+    adminPass = pf.elements.next.value;
+    toast("✅ Admin password changed for this session.");
+    render("admin", true);
   }
   if (e.target.id==="settingsForm"){
     e.preventDefault();
@@ -1420,10 +1508,34 @@ document.addEventListener("submit", function(e){
   }
 });
 document.addEventListener("click", function(e){
+  if (e.target.closest && e.target.closest("#ownerGate")){ go("admin"); return; }
   var t = e.target.closest("[data-atab]"); if (t){ adminTab = t.getAttribute("data-atab"); render("admin", true); return; }
-  var pd = e.target.closest("[data-pdel]"); if (pd){ products = products.filter(function(p){ return p.id!==pd.getAttribute("data-pdel"); }); toast("Product deleted."); render("admin", true); return; }
-  var cd = e.target.closest("[data-cdel]"); if (cd){ var cid = cd.getAttribute("data-cdel"); categories = categories.filter(function(c){ return c.id!==cid; }); buildNav(); toast("Category deleted."); render("admin", true); return; }
-  if (e.target.id==="adminLogout"){ adminAuthed = false; toast("Logged out of Admin."); go("home"); }
+  var eo = e.target.closest("[data-pedit-open]");
+  if (eo){ adminFormMode = "edit"; adminFormId = eo.getAttribute("data-pedit-open"); adminTab = "products"; render("admin", true); scrollToProductForm(); return; }
+  if (e.target.id==="adminAddBtn" || e.target.id==="ovAddProduct"){ adminTab = "products"; adminFormMode = "add"; adminFormId = null; render("admin", true); scrollToProductForm(); return; }
+  if (e.target.id==="productFormCancel"){ adminFormMode = null; adminFormId = null; render("admin", true); return; }
+  var fg = e.target.closest("[data-flag]"); if (fg){ fg.classList.toggle("on"); return; }
+  var bg = e.target.closest("[data-bg]"); if (bg){ $all("#bgSwatches .swatch").forEach(function(s){ s.classList.remove("on"); }); bg.classList.add("on"); return; }
+  var dp = e.target.closest("[data-pdup]");
+  if (dp){ var src = prod(dp.getAttribute("data-pdup")); if (src){ var copy = {}; for (var k in src) copy[k] = src[k]; copy.flags = src.flags.slice(); copy.specs = {}; for (var sk in src.specs) copy.specs[sk] = src.specs[sk]; copy.id = "p-" + Date.now().toString(36); copy.name = src.name + " (Copy)"; products.unshift(copy); toast("✅ Duplicated as <b>"+esc(copy.name)+"</b> — tap Edit to rename it."); } render("admin", true); return; }
+  var pd = e.target.closest("[data-pdel]"); if (pd){ var did = pd.getAttribute("data-pdel"); products = products.filter(function(p){ return p.id!==did; }); if (adminFormId===did){ adminFormMode = null; adminFormId = null; } toast("Product deleted."); render("admin", true); return; }
+  var ce = e.target.closest("[data-cedit]"); if (ce){ adminCatEditId = ce.getAttribute("data-cedit"); render("admin", true); return; }
+  if (e.target.id==="catFormCancel"){ adminCatEditId = null; render("admin", true); return; }
+  var cd = e.target.closest("[data-cdel]"); if (cd){ var cid = cd.getAttribute("data-cdel"); categories = categories.filter(function(c){ return c.id!==cid; }); if (adminCatEditId===cid) adminCatEditId = null; buildNav(); toast("Category deleted."); render("admin", true); return; }
+  if (e.target.id==="adminLogout" || e.target.id==="adminLogoutTop"){ adminAuthed = false; toast("Logged out of Admin."); go("home"); }
+});
+document.addEventListener("input", function(e){
+  if (e.target.id==="adminProdSearch"){ adminProdQ = e.target.value; var pos = e.target.selectionStart; render("admin", true); var s = $("#adminProdSearch"); if (s){ s.focus(); try{ s.setSelectionRange(pos,pos); }catch(_){} } }
+});
+document.addEventListener("change", function(e){
+  if (e.target.id==="adminProdCat"){ adminProdCat = e.target.value; render("admin", true); }
+});
+document.addEventListener("keydown", function(e){
+  if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key==="A" || e.key==="a")){
+    var tag = (e.target && e.target.tagName) || "";
+    if (tag==="INPUT" || tag==="TEXTAREA" || tag==="SELECT") return;
+    e.preventDefault(); go("admin");
+  }
 });
 document.addEventListener("change", function(e){
   var pe = e.target.getAttribute && e.target.getAttribute("data-pedit");
@@ -1468,6 +1580,7 @@ function render(route, keep){
 buildNav();
 applyTheme();
 render("home");
+try{ if (window.location.hash==="#admin") go("admin"); }catch(_){}
 </script>
 </body>
 </html>
