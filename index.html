@@ -33,8 +33,14 @@
   color-scheme:dark;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;overflow-y:scroll}
 body{font-family:'Hind Siliguri',system-ui,sans-serif;color:var(--ink);background:var(--bg);line-height:1.55;-webkit-font-smoothing:antialiased;transition:background-color .25s ease,color .25s ease}
+/* Scroll safety: this page must always scroll. overflow-y:scroll above keeps
+   the desktop scrollbar visible; the rules below make sure no height or
+   overflow constraint on html/body can ever pin the page (the shop has no
+   scroll-locking drawer or modal — the mobile menu is a plain dropdown). */
+html,body{height:auto;max-height:none}
+body{overflow:visible}
 h1,h2,h3,h4,.disp{font-family:'Archivo','Hind Siliguri',sans-serif;line-height:1.15;color:var(--heading)}
 img{max-width:100%;display:block}
 a{color:inherit;text-decoration:none}
@@ -842,6 +848,30 @@ function updateBadges(){
   wc.textContent = wishCountTotal(); wc.classList.toggle("hidden", wishCountTotal()===0);
 }
 
+/* ---------- scroll safety ----------
+   This shop never locks page scroll: the mobile menu is a plain dropdown,
+   and cart, product and admin are full views, not drawers or modals. So any
+   overflow/height/position lock or lock class found on <html> or <body> is
+   stale state (a leftover inline style, a browser quirk, an extension) and
+   is cleared. render() below runs on every view change, so no view can
+   inherit a locked page, and the watchdog clears a lock that appears while
+   a view is sitting open. */
+function unlockScroll(){
+  [document.documentElement, document.body].forEach(function(el){
+    if (!el) return;
+    el.style.overflow = ""; el.style.overflowX = ""; el.style.overflowY = "";
+    el.style.position = ""; el.style.top = ""; el.style.height = ""; el.style.maxHeight = ""; el.style.touchAction = "";
+    el.classList.remove("no-scroll", "scroll-locked", "locked", "modal-open", "overflow-hidden");
+  });
+}
+setInterval(function(){
+  var de = document.documentElement, b = document.body;
+  if (!de || !b) return;
+  var oy = getComputedStyle(de).overflowY, by = getComputedStyle(b).overflowY;
+  if (oy==="hidden" || oy==="clip" || by==="hidden" || by==="clip" || getComputedStyle(b).position==="fixed") unlockScroll();
+}, 3000);
+window.addEventListener("pageshow", unlockScroll);
+
 /* ---------- navigation ---------- */
 var NAV = [
   ["home","Home","হোম"],["shop","All Products","সব পণ্য"],["cat:used-phones","Used Smartphone","ব্যবহৃত স্মার্টফোন"],["cat:smartphones","Brand New Smartphone","ব্র্যান্ড নিউ স্মার্টফোন"],["cat:smartwatches","Smartwatches","স্মার্টওয়াচ"],
@@ -882,7 +912,7 @@ document.addEventListener("click", function(e){
   var t = e.target.closest("[data-nav]");
   if (t){ e.preventDefault(); go(t.getAttribute("data-nav")); }
 });
-$("#burgerBtn").addEventListener("click", function(){ $("#mobileMenu").classList.toggle("open"); });
+$("#burgerBtn").addEventListener("click", function(){ $("#mobileMenu").classList.toggle("open"); unlockScroll(); });
 function doSearch(q){
   shopState.q = q||""; shopState.cat = "all"; go("shop");
 }
@@ -2016,6 +2046,7 @@ document.addEventListener("change", function(e){
 
 /* ---------- router ---------- */
 function render(route, keep){
+  unlockScroll();
   currentRoute = route;
   var html = "";
   if (route==="home") html = homeHTML();
