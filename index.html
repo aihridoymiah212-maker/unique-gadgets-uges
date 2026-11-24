@@ -33,14 +33,21 @@
   color-scheme:dark;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;overflow-y:scroll}
+html{scroll-behavior:auto;overflow-y:scroll}
 body{font-family:'Hind Siliguri',system-ui,sans-serif;color:var(--ink);background:var(--bg);line-height:1.55;-webkit-font-smoothing:antialiased;transition:background-color .25s ease,color .25s ease}
-/* Scroll safety: this page must always scroll. overflow-y:scroll above keeps
-   the desktop scrollbar visible; the rules below make sure no height or
-   overflow constraint on html/body can ever pin the page (the shop has no
-   scroll-locking drawer or modal — the mobile menu is a plain dropdown). */
+/* Scroll safety: this page must always scroll.
+   - overflow-y:scroll on html keeps the desktop scrollbar always visible.
+   - scroll-behavior stays "auto": a global smooth setting turns every
+     programmatic jump-to-top into an animated scroll that fights the
+     visitor's own wheel/touch input for a moment after each tap — it reads
+     as "scroll is stuck". The one place that wants a glide (the admin
+     product form) asks for behavior:"smooth" explicitly.
+   - No height/overflow constraint on html/body may ever pin the page (the
+     shop has no scroll-locking drawer or modal — the mobile menu is a
+     plain dropdown). overflow-x:clip only stops sideways wobble; unlike
+     hidden it creates no scroll container, so it can never lock the page. */
 html,body{height:auto;max-height:none}
-body{overflow:visible}
+body{overflow:visible;overflow-x:clip}
 h1,h2,h3,h4,.disp{font-family:'Archivo','Hind Siliguri',sans-serif;line-height:1.15;color:var(--heading)}
 img{max-width:100%;display:block}
 a{color:inherit;text-decoration:none}
@@ -854,23 +861,40 @@ function updateBadges(){
    overflow/height/position lock or lock class found on <html> or <body> is
    stale state (a leftover inline style, a browser quirk, an extension) and
    is cleared. render() below runs on every view change, so no view can
-   inherit a locked page, and the watchdog clears a lock that appears while
-   a view is sitting open. */
+   inherit a locked page. The guards here clear a lock that appears while a
+   view is sitting open: a MutationObserver reacts the moment a style or
+   class lands on <html>/<body>, a light interval re-checks as a backstop,
+   and lifecycle events (back/forward restore, rotation, returning to the
+   tab) re-check too — a lock must never survive long enough to be felt. */
 function unlockScroll(){
   [document.documentElement, document.body].forEach(function(el){
     if (!el) return;
     el.style.overflow = ""; el.style.overflowX = ""; el.style.overflowY = "";
-    el.style.position = ""; el.style.top = ""; el.style.height = ""; el.style.maxHeight = ""; el.style.touchAction = "";
+    el.style.position = ""; el.style.top = ""; el.style.left = ""; el.style.right = ""; el.style.width = "";
+    el.style.height = ""; el.style.maxHeight = ""; el.style.touchAction = "";
     el.classList.remove("no-scroll", "scroll-locked", "locked", "modal-open", "overflow-hidden");
   });
 }
-setInterval(function(){
+function scrollIsLocked(){
   var de = document.documentElement, b = document.body;
-  if (!de || !b) return;
-  var oy = getComputedStyle(de).overflowY, by = getComputedStyle(b).overflowY;
-  if (oy==="hidden" || oy==="clip" || by==="hidden" || by==="clip" || getComputedStyle(b).position==="fixed") unlockScroll();
-}, 3000);
+  if (!de || !b) return false;
+  var ds = getComputedStyle(de), bs = getComputedStyle(b);
+  return ds.overflowY==="hidden" || ds.overflowY==="clip" ||
+         bs.overflowY==="hidden" || bs.overflowY==="clip" ||
+         ds.position==="fixed" || bs.position==="fixed";
+}
+function guardScroll(){ if (scrollIsLocked()) unlockScroll(); }
+if (window.MutationObserver){
+  var scrollGuardObs = new MutationObserver(guardScroll);
+  [document.documentElement, document.body].forEach(function(el){
+    if (el) scrollGuardObs.observe(el, { attributes:true, attributeFilter:["style","class"] });
+  });
+}
+setInterval(guardScroll, 1500);
 window.addEventListener("pageshow", unlockScroll);
+window.addEventListener("resize", guardScroll);
+window.addEventListener("orientationchange", guardScroll);
+document.addEventListener("visibilitychange", function(){ if (!document.hidden) guardScroll(); });
 
 /* ---------- navigation ---------- */
 var NAV = [
@@ -906,7 +930,7 @@ function go(route, arg){
   if (route==="shop" && arg && arg.q!==undefined){ shopState.q = arg.q; }
   render(route);
   $("#mobileMenu").classList.remove("open");
-  window.scrollTo({ top:0, behavior:"instant" in window ? "instant" : "auto" });
+  window.scrollTo(0, 0);
 }
 document.addEventListener("click", function(e){
   var t = e.target.closest("[data-nav]");
@@ -1078,17 +1102,31 @@ function heroHTML(){
     '<div class="hero-arrows"><button data-heroprev aria-label="Previous slide">‹</button><button data-heronext aria-label="Next slide">›</button></div>' +
   '</section>';
 }
+/* Switch the hero slide IN PLACE — only the .on classes move. The old
+   behaviour rebuilt the whole home page (render) every 6 seconds; while a
+   visitor was mid-scroll that tore the document down under their finger,
+   so the page jumped or felt stuck — the intermittent "scrolling problem"
+   on the home page. In-place switching never touches the layout, so an
+   auto-advance can never disturb scrolling again. */
+function showHero(idx){
+  var slides = $all(".hero .slide");
+  if (!slides.length) return;
+  heroIdx = ((idx % slides.length) + slides.length) % slides.length;
+  slides.forEach(function(s, i){ s.classList.toggle("on", i===heroIdx); });
+  $all(".hero-dots button").forEach(function(d, i){ d.classList.toggle("on", i===heroIdx); });
+}
 function startHero(){
   clearInterval(heroTimer);
   heroTimer = setInterval(function(){
     if (currentRoute!=="home") { clearInterval(heroTimer); return; }
-    heroIdx = (heroIdx+1)%3; render("home", true);
+    if (document.hidden) return;
+    showHero(heroIdx+1);
   }, 6000);
 }
 document.addEventListener("click", function(e){
-  var d = e.target.closest("[data-hero]"); if (d){ heroIdx = +d.getAttribute("data-hero"); render("home", true); return; }
-  if (e.target.closest("[data-heronext]")){ heroIdx = (heroIdx+1)%3; render("home", true); return; }
-  if (e.target.closest("[data-heroprev]")){ heroIdx = (heroIdx+2)%3; render("home", true); }
+  var d = e.target.closest("[data-hero]"); if (d){ showHero(+d.getAttribute("data-hero")); startHero(); return; }
+  if (e.target.closest("[data-heronext]")){ showHero(heroIdx+1); startHero(); return; }
+  if (e.target.closest("[data-heroprev]")){ showHero(heroIdx-1); startHero(); }
 });
 
 function productSection(title, sub, list, navArg){
@@ -2047,6 +2085,13 @@ document.addEventListener("change", function(e){
 /* ---------- router ---------- */
 function render(route, keep){
   unlockScroll();
+  /* In-place refreshes (keep=true: wishlist tap, cart +/-, typing in the
+     shop search, the shared catalogue arriving after load…) swap #app's
+     HTML. On mobile browsers the document's height collapses for a moment
+     during that swap and the browser clamps the scroll position to the
+     top — the page "jumps up" or seems to refuse to scroll. Remember the
+     position and put it straight back, so a refresh is invisible. */
+  var keepY = keep ? (window.scrollY || window.pageYOffset || 0) : 0;
   currentRoute = route;
   var html = "";
   if (route==="home") html = homeHTML();
@@ -2075,6 +2120,7 @@ function render(route, keep){
   });
   if (route==="home" && !keep) startHero();
   updateBadges();
+  if (keep && keepY>0) window.scrollTo(0, keepY);
 }
 buildNav();
 applyTheme();
